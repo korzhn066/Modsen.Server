@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Modsen.Server.Authentication.Api.Helpers;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
-using Modsen.Server.Authentication.Application.Features.ApplicationUser.Queries;
-using Modsen.Server.Authentication.Application.Services;
-using Modsen.Server.Authentication.Domain.Interfaces.Services;
+using Modsen.Server.Authentication.Application.Helpers;
+using Modsen.Server.Authentication.Application.UseCases.Authentication;
 
 namespace Modsen.Server.Authentication.Api.Controllers
 {
@@ -12,53 +12,42 @@ namespace Modsen.Server.Authentication.Api.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
-        private readonly ITokenProviderService _tokenProviderService;
         private readonly IMediator _mediator;
+        private readonly RefreshTokenUseCase _refreshTokenUseCase;
         private readonly int _refreshTokenValidityInDays;
 
         public TokenController(
-            ITokenProviderService tokenProviderService,
             IConfiguration configuration, 
+            RefreshTokenUseCase refreshTokenUseCase,
             IMediator mediator)
         {
-            _tokenProviderService = tokenProviderService;
             _mediator = mediator;
-            _refreshTokenValidityInDays = GetRefreshTokenValidityInDays(configuration);
+            _refreshTokenUseCase = refreshTokenUseCase;
+            _refreshTokenValidityInDays = ConfigurationHelper.GetRefreshTokenValidityInDays(configuration);
         }
 
         
         [HttpPost]
         [Route("refresh")]
-        
         public async Task<IActionResult> Refresh()
         {
-            var oldAccesstoken = HttpContext.Request.Headers.Authorization[0].Split(' ')[1];
-            var principal = _tokenProviderService.GetPrincipalFromExpiredToken(oldAccesstoken);
-
-            var result = await _mediator.Send(new CheckApplicationUserRefreshTokenValidity
+            try
             {
-                UserName = principal.Identity!.Name!,
-                RefreshToken = HttpContext.Request.Cookies["RefreshToken"]!
-            });
+                var tokenModel = await _refreshTokenUseCase.RefreshAsync(
+                    AuthenticateHelper.GetAccessToken(HttpContext), 
+                    HttpContext.Request.Cookies["RefreshToken"]!);
 
-            if (!result)
-                return StatusCode(401, "Invalid refresh token");
+                CookieHelper.SetRefreshTokenInCookie(tokenModel.RefreshToken, _refreshTokenValidityInDays, HttpContext);
 
-            var newRefreshToken = _tokenProviderService.GenerateRefreshToken();
-
-            await _mediator.Send(new ChangeApplicationUserRefreshToken
+                return Ok(new
+                {
+                    accessToken = tokenModel.AccessToken
+                });
+            }
+            catch
             {
-                UserName = principal.Identity!.Name!,
-                RefreshToken = newRefreshToken,
-                RefreshTokenValidityInDays = _refreshTokenValidityInDays
-            });
-
-            SetRefreshTokenInCookie(newRefreshToken);
-
-            return Ok(new
-            {
-                accessToken = _tokenProviderService.GenerateAccessToken(principal.Claims)
-            });
+                return Unauthorized();
+            }
         }
 
         
@@ -68,29 +57,11 @@ namespace Modsen.Server.Authentication.Api.Controllers
         {
             await _mediator.Send(new ChangeApplicationUserRefreshToken
             {
-                UserName = HttpContext.User.Identity.Name,
+                UserName = AuthenticateHelper.GetUserName(HttpContext),
                 RefreshToken = null,
             });
 
-            return Ok();
-        }
-
-        private void SetRefreshTokenInCookie(string refreshToken)
-        {
-            HttpContext.Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
-            {
-                MaxAge = TimeSpan.FromDays(_refreshTokenValidityInDays)
-            });
-        }
-
-        private int GetRefreshTokenValidityInDays(IConfiguration configuration)
-        {
-            var parseResult = int.TryParse(configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-
-            if (!parseResult)
-                throw new ArgumentException();
-
-            return refreshTokenValidityInDays;
+            return NoContent();
         }
     }
 }

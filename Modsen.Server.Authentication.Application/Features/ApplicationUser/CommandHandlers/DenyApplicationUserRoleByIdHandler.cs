@@ -19,7 +19,7 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
             var user = await _userManager.FindByIdAsync(request.UserId);
 
             if (user is null)
-                throw new ArgumentNullException(nameof(user));
+                throw new KeyNotFoundException(nameof(user));
 
             await _userManager.RemoveFromRoleAsync(user, request.RoleName);
         }

@@ -7,11 +7,7 @@ namespace Modsen.Server.Authentication.Infrastructure.Data
 {
     public class DBContext : IdentityDbContext<ApplicationUser>
     {
-        public DBContext(DbContextOptions options) : base(options)
-        {
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
-        }
+        public DBContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

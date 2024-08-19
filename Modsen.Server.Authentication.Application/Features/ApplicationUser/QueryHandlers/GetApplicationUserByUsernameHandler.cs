@@ -23,7 +23,7 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Quer
             var user = await _userManager.FindByNameAsync(request.Username);
 
             if (user is null)
-                throw new ArgumentNullException(nameof(user));
+                throw new KeyNotFoundException(nameof(user));
 
             return user;
         }

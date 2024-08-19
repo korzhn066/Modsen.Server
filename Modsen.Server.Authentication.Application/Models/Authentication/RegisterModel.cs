@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Modsen.Server.Authentication.Domain.Models
+namespace Modsen.Server.Authentication.Application.Models.Authentication
 {
     public class RegisterModel
     {

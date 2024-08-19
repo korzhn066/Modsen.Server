@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Modsen.Server.Authentication.Domain.Interfaces.Services;
-using Modsen.Server.Authentication.Domain.Models;
+using Modsen.Server.Authentication.Api.Helpers;
+using Modsen.Server.Authentication.Application.Helpers;
+using Modsen.Server.Authentication.Application.Models.Authentication;
+using Modsen.Server.Authentication.Application.UseCases.Authentication;
 
 namespace Modsen.Server.Authentication.Api.Controllers
 {
@@ -8,85 +10,63 @@ namespace Modsen.Server.Authentication.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IApplicationAuthenticateService _applicationAuthenticateService;
-        private readonly ITokenProviderService _tokenProviderService;
-        private readonly int _refreshTokenValidityInDays;
+        private LoginUserUseCase _loginUserUseCase;
+        private RegisterUserUseCase _registerUserUseCase;
+        private int _refreshTokenValidityInDays;
 
         public AuthenticationController(
-            IApplicationAuthenticateService applicationAuthenticateService, 
-            ITokenProviderService tokenProviderService, 
+            LoginUserUseCase loginUserUseCase, 
+            RegisterUserUseCase registerUserUseCase,
             IConfiguration configuration) 
         { 
-            _applicationAuthenticateService = applicationAuthenticateService;
-            _tokenProviderService = tokenProviderService;
-            _refreshTokenValidityInDays = GetRefreshTokenValidityInDays(configuration);
+            _loginUserUseCase = loginUserUseCase;
+            _registerUserUseCase= registerUserUseCase;
+            _refreshTokenValidityInDays = ConfigurationHelper.GetRefreshTokenValidityInDays(configuration);
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
-            var refreshToken = _tokenProviderService.GenerateRefreshToken();
+            try
+            {
+                var tokenModel = await _registerUserUseCase.RegisterAsync(registerModel);
 
-            var result = await _applicationAuthenticateService.RegisterAsync(registerModel, refreshToken, _refreshTokenValidityInDays);
+                CookieHelper.SetRefreshTokenInCookie(tokenModel.RefreshToken, _refreshTokenValidityInDays, HttpContext);
 
-            if (result.Succeeded) 
-            { 
-                SetRefreshTokenInCookie(refreshToken);
-
-                return Ok(new 
+                return Ok(new
                 {
-                    accessToken = _tokenProviderService.GenerateAccessToken(
-                        _applicationAuthenticateService.User ?? throw new ArgumentNullException(),
-                        _applicationAuthenticateService.Roles)
+                    accessToken = tokenModel.AccessToken
                 });
             }
-
-            return StatusCode(403, new
+            catch (Exception ex) 
             {
-                errors = result.Errors.Select(error => error.Code)
-            });
+                return StatusCode(403, new
+                {
+                    errors = ex.Message
+                });
+            }
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
-            var refreshToken = _tokenProviderService.GenerateRefreshToken();
-
-            var result = await _applicationAuthenticateService.LoginAsync(loginModel, refreshToken, _refreshTokenValidityInDays);
-
-            if (result)
+            try
             {
-                SetRefreshTokenInCookie(refreshToken);
+                var tokenModel = await _loginUserUseCase.LoginAsync(loginModel);
+
+                CookieHelper.SetRefreshTokenInCookie(tokenModel.RefreshToken, _refreshTokenValidityInDays, HttpContext);
 
                 return Ok(new
                 {
-                    accessToken = _tokenProviderService.GenerateAccessToken(
-                        _applicationAuthenticateService.User ?? throw new ArgumentNullException(),
-                        _applicationAuthenticateService.Roles)
+                    accessToken = tokenModel.AccessToken
                 });
             }
-
-            return Unauthorized();
-        }
-
-        private void SetRefreshTokenInCookie(string refreshToken)
-        {
-            HttpContext.Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
+            catch
             {
-                MaxAge = TimeSpan.FromDays(_refreshTokenValidityInDays)
-            });
-        }
-
-        private int GetRefreshTokenValidityInDays(IConfiguration configuration)
-        {
-            var parseResult = int.TryParse(configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-
-            if (!parseResult)
-                throw new ArgumentException();
-
-            return refreshTokenValidityInDays;
+                return Unauthorized();
+            }
         }
     }
 }

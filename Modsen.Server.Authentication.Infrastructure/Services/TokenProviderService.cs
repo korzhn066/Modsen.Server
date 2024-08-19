@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Modsen.Server.Authentication.Application.Services
+namespace Modsen.Server.Authentication.Infrastructure.Services
 {
     public class TokenProviderService : ITokenProviderService
     {

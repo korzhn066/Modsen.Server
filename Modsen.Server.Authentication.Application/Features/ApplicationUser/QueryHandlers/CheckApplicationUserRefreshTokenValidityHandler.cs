@@ -18,7 +18,7 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Quer
             var user = await _userManager.FindByNameAsync(request.UserName);
 
             if (user is null) 
-                throw new ArgumentNullException(nameof(user));
+                throw new KeyNotFoundException(nameof(user));
 
             if (user.RefreshToken != request.RefreshToken || 
                 user.RefreshTokenExpiryTime < DateTime.Now)
