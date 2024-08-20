@@ -1,6 +1,0 @@
-@Modsen.Server.CarsControl.Api_HostAddress = http://localhost:5272
-
-GET {{Modsen.Server.CarsControl.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
