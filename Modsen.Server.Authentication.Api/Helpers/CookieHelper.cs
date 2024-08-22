@@ -1,6 +1,6 @@
 ﻿namespace Modsen.Server.Authentication.Api.Helpers
 {
-    public class CookieHelper
+    public static class CookieHelper
     {
         public static void SetRefreshTokenInCookie(
             string refreshToken, 

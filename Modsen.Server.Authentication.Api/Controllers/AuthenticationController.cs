@@ -2,27 +2,19 @@
 using Modsen.Server.Authentication.Api.Helpers;
 using Modsen.Server.Authentication.Application.Helpers;
 using Modsen.Server.Authentication.Application.Models.Authentication;
-using Modsen.Server.Authentication.Application.UseCases.Authentication;
+using MediatR;
+using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
 
 namespace Modsen.Server.Authentication.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController(
+        IMediator mediator,
+        IConfiguration configuration) : ControllerBase
     {
-        private LoginUserUseCase _loginUserUseCase;
-        private RegisterUserUseCase _registerUserUseCase;
-        private int _refreshTokenValidityInDays;
-
-        public AuthenticationController(
-            LoginUserUseCase loginUserUseCase, 
-            RegisterUserUseCase registerUserUseCase,
-            IConfiguration configuration) 
-        { 
-            _loginUserUseCase = loginUserUseCase;
-            _registerUserUseCase= registerUserUseCase;
-            _refreshTokenValidityInDays = ConfigurationHelper.GetRefreshTokenValidityInDays(configuration);
-        }
+        private readonly IMediator _mediator = mediator;
+        private readonly int _refreshTokenValidityInDays = ConfigurationHelper.GetRefreshTokenValidityInDays(configuration);
 
         [HttpPost]
         [Route("register")]
@@ -30,7 +22,11 @@ namespace Modsen.Server.Authentication.Api.Controllers
         {
             try
             {
-                var tokenModel = await _registerUserUseCase.RegisterAsync(registerModel);
+                var tokenModel = await _mediator.Send(new RegisterApplicationUser
+                {
+                    RegisterModel = registerModel,
+                    RefreshTokenValidityInDays = _refreshTokenValidityInDays
+                });
 
                 CookieHelper.SetRefreshTokenInCookie(tokenModel.RefreshToken, _refreshTokenValidityInDays, HttpContext);
 
@@ -39,7 +35,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
                     accessToken = tokenModel.AccessToken
                 });
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return StatusCode(403, new
                 {
@@ -54,7 +50,11 @@ namespace Modsen.Server.Authentication.Api.Controllers
         {
             try
             {
-                var tokenModel = await _loginUserUseCase.LoginAsync(loginModel);
+                var tokenModel = await _mediator.Send(new LoginApplicationUser
+                {
+                    LoginModel = loginModel,
+                    RefreshTokenValidityInDays = _refreshTokenValidityInDays
+                });
 
                 CookieHelper.SetRefreshTokenInCookie(tokenModel.RefreshToken, _refreshTokenValidityInDays, HttpContext);
 

@@ -1,31 +1,21 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Modsen.Server.Authentication.Application.UseCases.ApplicationUser.Queries;
+using Modsen.Server.Authentication.Domain.Exeptions;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.QueryHandlers
 {
-    public class GetApplicationUserByUsernameHandler : IRequestHandler<GetApplicationUserByUsername, Domain.Entities.ApplicationUser>
+    public class GetApplicationUserByUsernameHandler(GetApplicationUserByUsernameUseCases getApplicationUserByUsernameUseCases)
+        : IRequestHandler<GetApplicationUserByUsername, Domain.Entities.ApplicationUser>
     {
-        private readonly UserManager<Domain.Entities.ApplicationUser> _userManager;
-
-        public GetApplicationUserByUsernameHandler(UserManager<Domain.Entities.ApplicationUser> userManager)
-        {
-            _userManager = userManager;
-        }
+        private readonly GetApplicationUserByUsernameUseCases _getApplicationUserByUsernameUseCases 
+            = getApplicationUserByUsernameUseCases;
 
         public async Task<Domain.Entities.ApplicationUser> Handle(GetApplicationUserByUsername request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
-
-            if (user is null)
-                throw new KeyNotFoundException(nameof(user));
-
-            return user;
+            return await _getApplicationUserByUsernameUseCases.GetAsync(
+                request.Username);
         }
     }
 }

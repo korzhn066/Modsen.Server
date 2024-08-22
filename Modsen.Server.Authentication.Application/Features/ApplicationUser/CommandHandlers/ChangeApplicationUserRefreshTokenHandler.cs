@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
+using Modsen.Server.Authentication.Application.UseCases.ApplicationUser.Commands;
+using Modsen.Server.Authentication.Domain.Exeptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,27 +13,17 @@ using System.Threading.Tasks;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers
 {
-    public class ChangeApplicationUserRefreshTokenHandler : IRequestHandler<ChangeApplicationUserRefreshToken>
+    public class ChangeApplicationUserRefreshTokenHandler(ChangeApplicationUserRefreshTokenUseCase changeApplicationUserRefreshTokenUseCase) 
+        : IRequestHandler<ChangeApplicationUserRefreshToken>
     {
-        private readonly UserManager<Domain.Entities.ApplicationUser> _userManager;
-
-        public ChangeApplicationUserRefreshTokenHandler(
-            UserManager<Domain.Entities.ApplicationUser> userManager)
-        {
-            _userManager = userManager;
-        }
+        private readonly ChangeApplicationUserRefreshTokenUseCase _changeApplicationUserRefreshTokenUseCase = changeApplicationUserRefreshTokenUseCase;
 
         public async Task Handle(ChangeApplicationUserRefreshToken request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
-
-            if (user is null)
-                throw new KeyNotFoundException(nameof(user));
-
-            user.RefreshToken = request.RefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(request.RefreshTokenValidityInDays);
-
-            await _userManager.UpdateAsync(user);
+            await _changeApplicationUserRefreshTokenUseCase.ChangeRefreshTokenAsync(
+                request.UserName,
+                request.RefreshToken,
+                request.RefreshTokenValidityInDays);
         }
     }
 }

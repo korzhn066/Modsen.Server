@@ -1,22 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Modsen.Server.Authentication.Domain.Exceptions;
 
 namespace Modsen.Server.Authentication.Application.Helpers
 {
-    public class ConfigurationHelper
+    public static class ConfigurationHelper
     {
         public static int GetRefreshTokenValidityInDays(IConfiguration configuration)
         {
             var parseResult = int.TryParse(configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
 
-            if (!parseResult)
-                throw new ArgumentException();
+            if (parseResult)
+            {
+                return refreshTokenValidityInDays;
+            }
 
-            return refreshTokenValidityInDays;
+            throw new BadRequestException();
         }
     }
 }

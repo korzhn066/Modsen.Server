@@ -1,28 +1,22 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
+using Modsen.Server.Authentication.Application.UseCases.ApplicationUser.Commands;
+using Modsen.Server.Authentication.Domain.Exeptions;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers
 {
-    public class ChangeApplicationUserStatusHandler : IRequestHandler<ChangeApplicationUserStatus>
+    public class ChangeApplicationUserStatusHandler(ChangeApplicationUserStatusHandlerUseCase changeApplicationUserStatusHandlerUseCase)
+        : IRequestHandler<ChangeApplicationUserStatus>
     {
-        private readonly UserManager<Domain.Entities.ApplicationUser> _userManager;
-
-        public ChangeApplicationUserStatusHandler(UserManager<Domain.Entities.ApplicationUser> userManager)
-        {
-            _userManager = userManager;
-        }
+        private readonly ChangeApplicationUserStatusHandlerUseCase _changeApplicationUserStatusHandlerUseCase 
+            = changeApplicationUserStatusHandlerUseCase;
 
         public async Task Handle(ChangeApplicationUserStatus request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId);
-
-            if (user is null)
-                throw new KeyNotFoundException(nameof(user));
-
-            user.UserStatus = request.Status;
-
-            await _userManager.UpdateAsync(user);
+            await _changeApplicationUserStatusHandlerUseCase.ChangeUserStatusAsync(
+                request.UserId,
+                request.Status);
         }
     }
 }

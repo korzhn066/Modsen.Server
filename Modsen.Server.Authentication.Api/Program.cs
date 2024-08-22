@@ -1,11 +1,7 @@
-using Modsen.Server.Authentication.Api.Configuration;
-using Modsen.Server.Authentication.Domain.Interfaces.Services;
-using Modsen.Server.Authentication.Infrastructure.Data;
 using Modsen.Server.Authentication.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Modsen.Server.Authentication.Application;
 using Microsoft.AspNetCore.CookiePolicy;
-using Modsen.Server.Authentication.Infrastructure.Services;
+using Modsen.Server.Authentication.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,17 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddIdentityConfiguration();
-builder.Services.AddAuthenticateConfiguration(builder);
-
-builder.Services.AddScoped<ITokenProviderService, TokenProviderService>();
-
 builder.Services
     .AddInfrastructure()
-    .AddApplication();
+    .AddApplication()
+    .AddPresentation(builder);
 
 var app = builder.Build();
 

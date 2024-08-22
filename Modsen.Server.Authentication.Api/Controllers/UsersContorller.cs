@@ -10,13 +10,9 @@ namespace Modsen.Server.Authentication.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin")]
-    public class UsersController : ControllerBase
+    public class UsersController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public UsersController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         [HttpPost]
         [Route("deny_admin_role")]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Modsen.Server.Authentication.Domain.Entities;
+using Modsen.Server.Authentication.Domain.Exceptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,9 +19,9 @@ namespace Modsen.Server.Authentication.Infrastructure.Services
 
         public TokenProviderService(IConfiguration configuration)
         {
-            _validAudience = configuration["JWT:ValidAudience"] ?? throw new ArgumentNullException();
-            _validIssuer = configuration["JWT:ValidIssuer"] ?? throw new ArgumentNullException();
-            _secretKey = configuration["JWT:SecretKey"] ?? throw new ArgumentNullException();
+            _validAudience = configuration["JWT:ValidAudience"] ?? throw new BadRequestException();
+            _validIssuer = configuration["JWT:ValidIssuer"] ?? throw new BadRequestException();
+            _secretKey = configuration["JWT:SecretKey"] ?? throw new BadRequestException();
             _accessTokenValidityInMinutes = GetAccessTokenValidityInMinutes(configuration);
         }
 
@@ -78,7 +79,9 @@ namespace Modsen.Server.Authentication.Infrastructure.Services
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             
             if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
                 throw new SecurityTokenException("Invalid token");
+            } 
             
             return principal;
         }
@@ -105,7 +108,9 @@ namespace Modsen.Server.Authentication.Infrastructure.Services
             var parseResult = int.TryParse(configuration["JWT:AccessTokenValidityInMinutes"], out int accessTokenValidityInDays);
 
             if (!parseResult)
+            {
                 throw new ArgumentException();
+            }
 
             return accessTokenValidityInDays;
         }

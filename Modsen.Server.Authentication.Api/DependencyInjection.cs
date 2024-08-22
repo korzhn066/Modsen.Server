@@ -1,13 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Modsen.Server.Authentication.Domain.Entities;
+using Modsen.Server.Authentication.Domain.Interfaces.Services;
+using Modsen.Server.Authentication.Infrastructure.Data;
+using Modsen.Server.Authentication.Infrastructure.Services;
 using System.Text;
 
-namespace Modsen.Server.Authentication.Api.Configuration
+namespace Modsen.Server.Authentication.Api
 {
-    internal static class AuthenticationConfiguration
+    public static class DependencyInjection
     {
-        internal static IServiceCollection AddAuthenticateConfiguration(this IServiceCollection services, WebApplicationBuilder builder)
+        public static IServiceCollection AddPresentation(this IServiceCollection services, WebApplicationBuilder builder)
         {
+            services.AddDbContext<DBContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             services
                 .AddAuthentication(options =>
                 {
@@ -30,6 +39,19 @@ namespace Modsen.Server.Authentication.Api.Configuration
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]!)),
                     };
                 });
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            })
+            .AddEntityFrameworkStores<DBContext>()
+            .AddDefaultTokenProviders();
+
+            services.AddScoped<ITokenProviderService, TokenProviderService>();
 
             return services;
         }
