@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
 using Modsen.Server.Authentication.Application.Models.Authentication;
+using Modsen.Server.Authentication.Domain.Constants;
 using Modsen.Server.Authentication.Domain.Exceptions;
 using Modsen.Server.Authentication.Domain.Exeptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
@@ -20,11 +21,12 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
         {
             var principal = _tokenProviderService.GetPrincipalFromExpiredToken(request.OldAccessToken);
 
-            var user = await _userManager.FindByNameAsync(principal.Identity!.Name!) ?? throw new NotFoundException();
+            var user = await _userManager.FindByNameAsync(principal.Identity!.Name!) 
+                ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
 
             if (user.RefreshToken != request.OldRefreshToken)
             {
-                throw new BadRequestException();
+                throw new BadRequestException(ErrorConstants.InvalidRefreshTokenError);
             }
 
             var newRefreshToken = _tokenProviderService.GenerateRefreshToken();

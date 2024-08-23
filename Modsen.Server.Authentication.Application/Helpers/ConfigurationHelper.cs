@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Modsen.Server.Authentication.Domain.Constants;
 using Modsen.Server.Authentication.Domain.Exceptions;
 
 namespace Modsen.Server.Authentication.Application.Helpers
@@ -14,7 +15,7 @@ namespace Modsen.Server.Authentication.Application.Helpers
                 return refreshTokenValidityInDays;
             }
 
-            throw new ArgumentException();
+            throw new ArgumentException(ErrorConstants.ServerSideError);
         }
     }
 }

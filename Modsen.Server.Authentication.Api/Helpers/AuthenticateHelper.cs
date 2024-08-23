@@ -1,4 +1,6 @@
-﻿using Modsen.Server.Authentication.Domain.Exceptions;
+﻿using Modsen.Server.Authentication.Domain.Constants;
+using Modsen.Server.Authentication.Domain.Exceptions;
+using Modsen.Server.Authentication.Domain.Exeptions;
 
 namespace Modsen.Server.Authentication.Api.Helpers
 {
@@ -16,14 +18,16 @@ namespace Modsen.Server.Authentication.Api.Helpers
 
         public static string GetAccessToken(HttpContext httpContext)
         {
-            var authorizationValue = httpContext.Request.Headers.Authorization[0] ?? throw new ArgumentException();
+            var authorizationValue = httpContext.Request.Headers.Authorization[0]
+                ?? throw new NotFoundException(ErrorConstants.NotFoundAccessTokenError);
 
             return authorizationValue.Split(' ')[1];
         }
 
         public static string GetRefreshToken(HttpContext httpContext)
         {
-            return httpContext.Request.Cookies["RefreshToken"] ?? throw new ArgumentException();
+            return httpContext.Request.Cookies["RefreshToken"] 
+                ?? throw new NotFoundException(ErrorConstants.NotFoundRefreshTokenError);
         }
     }
 }

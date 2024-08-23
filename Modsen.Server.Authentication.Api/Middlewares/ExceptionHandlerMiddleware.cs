@@ -1,4 +1,5 @@
 ﻿using Modsen.Server.Authentication.Domain.Exceptions;
+using Modsen.Server.Authentication.Domain.Exeptions;
 using Newtonsoft.Json;
 
 namespace Modsen.Server.Authentication.Api.Middlewares
@@ -43,7 +44,8 @@ namespace Modsen.Server.Authentication.Api.Middlewares
         {
             return exception switch
             {
-                BadRequestException => 404,
+                BadRequestException => 400,
+                NotFoundException => 404,
                 _ => 500
             };
         }

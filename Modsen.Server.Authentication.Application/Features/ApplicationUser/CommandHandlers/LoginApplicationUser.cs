@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
 using Modsen.Server.Authentication.Application.Models.Authentication;
+using Modsen.Server.Authentication.Domain.Constants;
 using Modsen.Server.Authentication.Domain.Exceptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
 
@@ -23,7 +24,7 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
 
             if (!result)
             {
-                throw new BadRequestException();
+                throw new BadRequestException(ErrorConstants.LoginError);
             }
 
             var roles = (List<string>)await _userManager.GetRolesAsync(user);

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
+using Modsen.Server.Authentication.Domain.Constants;
 using Modsen.Server.Authentication.Domain.Exeptions;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers
@@ -12,7 +13,8 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
 
         public async Task Handle(ChangeApplicationUserStatus request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId) ?? throw new NotFoundException();
+            var user = await _userManager.FindByIdAsync(request.UserId)
+                ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
 
             user.UserStatus = request.Status;
 

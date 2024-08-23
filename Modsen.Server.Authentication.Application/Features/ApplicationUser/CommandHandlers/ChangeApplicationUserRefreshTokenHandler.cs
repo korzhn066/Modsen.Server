@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
+using Modsen.Server.Authentication.Domain.Constants;
 using Modsen.Server.Authentication.Domain.Exeptions;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
 
         public async Task Handle(ChangeApplicationUserRefreshToken request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName) ?? throw new NotFoundException();
+            var user = await _userManager.FindByNameAsync(request.UserName) 
+                ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
 
             user.RefreshToken = request.RefreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(request.RefreshTokenValidityInDays);

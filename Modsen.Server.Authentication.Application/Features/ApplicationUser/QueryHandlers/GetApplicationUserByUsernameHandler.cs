@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Queries;
+using Modsen.Server.Authentication.Domain.Constants;
 using Modsen.Server.Authentication.Domain.Exeptions;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.QueryHandlers
@@ -12,7 +13,8 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Quer
 
         public async Task<Domain.Entities.ApplicationUser> Handle(GetApplicationUserByUsername request, CancellationToken cancellationToken)
         {
-            return await _userManager.FindByNameAsync(request.Username) ?? throw new NotFoundException();
+            return await _userManager.FindByNameAsync(request.Username)
+                ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
         }
     }
 }
