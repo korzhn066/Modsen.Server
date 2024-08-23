@@ -14,7 +14,7 @@ namespace Modsen.Server.Authentication.Application.Helpers
                 return refreshTokenValidityInDays;
             }
 
-            throw new BadRequestException();
+            throw new ArgumentException();
         }
     }
 }

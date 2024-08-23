@@ -20,26 +20,16 @@ namespace Modsen.Server.Authentication.Api.Controllers
         [Route("refresh")]
         public async Task<IActionResult> Refresh()
         {
-            try
+            var tokenModel = await _mediator.Send(new RefreshToken
             {
-                var tokenModel = await _mediator.Send(new RefreshToken
-                {
-                    OldAccessToken = AuthenticateHelper.GetAccessToken(HttpContext),
-                    OldRefreshToken = AuthenticateHelper.GetRefreshToken(HttpContext),
-                    RefreshTokenValidityInDays = _refreshTokenValidityInDays 
-                });
+                OldAccessToken = AuthenticateHelper.GetAccessToken(HttpContext),
+                OldRefreshToken = AuthenticateHelper.GetRefreshToken(HttpContext),
+                RefreshTokenValidityInDays = _refreshTokenValidityInDays
+            });
 
-                CookieHelper.SetRefreshTokenInCookie(tokenModel.RefreshToken, _refreshTokenValidityInDays, HttpContext);
+            CookieHelper.SetRefreshTokenInCookie(tokenModel.RefreshToken, _refreshTokenValidityInDays, HttpContext);
 
-                return Ok(new
-                {
-                    accessToken = tokenModel.AccessToken
-                });
-            }
-            catch
-            {
-                return Unauthorized();
-            }
+            return Ok(tokenModel.AccessToken);
         }
         
         [HttpPost, Authorize]

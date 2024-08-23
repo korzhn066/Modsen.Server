@@ -2,6 +2,7 @@ using Modsen.Server.Authentication.Infrastructure;
 using Modsen.Server.Authentication.Application;
 using Microsoft.AspNetCore.CookiePolicy;
 using Modsen.Server.Authentication.Api;
+using Modsen.Server.Authentication.Api.MiddlewareExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-    .AddPresentation(builder)
-    .AddInfrastructure()
+    .AddInfrastructure(builder)
     .AddApplication();
     
 
@@ -33,6 +33,8 @@ app.UseCookiePolicy(new CookiePolicyOptions
     HttpOnly = HttpOnlyPolicy.Always,
     Secure = CookieSecurePolicy.Always
 });
+
+app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
 

@@ -63,10 +63,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
                 Count = count
             });
 
-            return Ok(new
-            {
-                users = users
-            });
+            return Ok(users);
         }
 
         [HttpGet]
@@ -78,10 +75,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
                 Username = userName
             });
 
-            return Ok(new
-            {
-                user = user
-            });
+            return Ok(user);
         }
     }
 }
