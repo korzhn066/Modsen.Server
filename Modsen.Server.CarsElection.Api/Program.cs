@@ -1,7 +1,6 @@
-using Modsen.Server.Authentication.Infrastructure;
-using Modsen.Server.Authentication.Application;
-using Microsoft.AspNetCore.CookiePolicy;
-using Modsen.Server.Authentication.Api;
+using Microsoft.EntityFrameworkCore;
+using Modsen.Server.CarsElection.Infrastructure.Data;
+using Modsen.Server.CarsElection.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +11,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services
-    .AddPresentation(builder)
-    .AddInfrastructure()
-    .AddApplication();
-    
+builder.Services.AddDbContext<DBContext>(options =>
+  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
@@ -27,16 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCookiePolicy(new CookiePolicyOptions
-{
-    MinimumSameSitePolicy = SameSiteMode.None,
-    HttpOnly = HttpOnlyPolicy.Always,
-    Secure = CookieSecurePolicy.Always
-});
-
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

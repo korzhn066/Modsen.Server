@@ -17,6 +17,17 @@ namespace Modsen.Server.Authentication.Api
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            })
+            .AddEntityFrameworkStores<DBContext>()
+            .AddDefaultTokenProviders();
+
             services
                 .AddAuthentication(options =>
                 {
@@ -38,18 +49,7 @@ namespace Modsen.Server.Authentication.Api
                         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]!)),
                     };
-                });
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 1;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-            })
-            .AddEntityFrameworkStores<DBContext>()
-            .AddDefaultTokenProviders();
+                });            
 
             services.AddScoped<ITokenProviderService, TokenProviderService>();
 

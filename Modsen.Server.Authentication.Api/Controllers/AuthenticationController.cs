@@ -4,6 +4,7 @@ using Modsen.Server.Authentication.Application.Helpers;
 using Modsen.Server.Authentication.Application.Models.Authentication;
 using MediatR;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Modsen.Server.Authentication.Api.Controllers
 {
