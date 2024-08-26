@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modsen.Server.CarsControl.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modsen.Server.CarsControl.DataAccess", "Modsen.Server.CarsControl.DataAccess\Modsen.Server.CarsControl.DataAccess.csproj", "{F283084E-63D6-4C2F-8569-6494CE39500E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modsen.Server.Shared", "Modsen.Server.Shared\Modsen.Server.Shared.csproj", "{0BD84793-E58D-4150-BA50-79D8DBB36FFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modsen.Server.Shared", "Modsen.Server.Shared\Modsen.Server.Shared.csproj", "{0BD84793-E58D-4150-BA50-79D8DBB36FFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,7 +43,6 @@ Global
 		{64E530A7-E397-4C71-9D9E-C78F97D2C784} = {2D738D2E-DE97-454C-9EED-645987856492}
 		{994C172D-E9DA-4460-A93C-EE070FAB5EF7} = {2D738D2E-DE97-454C-9EED-645987856492}
 		{F283084E-63D6-4C2F-8569-6494CE39500E} = {2D738D2E-DE97-454C-9EED-645987856492}
-		{0BD84793-E58D-4150-BA50-79D8DBB36FFD} = {2D738D2E-DE97-454C-9EED-645987856492}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C25981C2-1466-4DAD-B4D2-A4F7B71EF54D}
