@@ -1,26 +1,36 @@
 ﻿using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
+using Modsen.Server.Shared.Constants;
+using Modsen.Server.Shared.Exceptions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Modsen.Server.CarsControl.DataAccess.Repository
 {
-    internal class MongoRepository<T> : IMongoRepository<T> where T : class
+    internal class MongoRepository<T>(IMongoDatabase database, string collectionName) : IMongoRepository<T> where T : class
     {
-        private readonly IMongoCollection<T> _collection;
+        private readonly IMongoCollection<T> _collection = database.GetCollection<T>(collectionName);
 
-        public MongoRepository(IMongoDatabase database, string collectionName)
+        public async Task<List<T>> GetAllAsync(int page, int count, CancellationToken cancellationToken = default)
         {
-            _collection = database.GetCollection<T>(collectionName);
+            if (page == -1)
+            {
+                return await _collection.Find(new BsonDocument()).ToListAsync(cancellationToken);
+            }
+
+            return await _collection
+                .Find(new BsonDocument())
+                .Skip(page * count)
+                .Limit(count)
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            return await _collection.Find(new BsonDocument()).ToListAsync();
-        }
+            var item = await _collection
+                .Find(Builders<T>.Filter.Eq("_id", new ObjectId(id)))
+                .FirstOrDefaultAsync(cancellationToken);
 
-        public async Task<T> GetByIdAsync(string id)
-        {
-            return await _collection.Find(Builders<T>.Filter.Eq("_id", new ObjectId(id))).FirstOrDefaultAsync();
+            return (T?)item ?? throw new NotFoundException(ErrorConstants.NotFoundEntityError);
         }
 
         public async Task AddAsync(T entity)
@@ -30,12 +40,22 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
 
         public async Task UpdateAsync(string id, T entity)
         {
-            await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)), entity);
+            var result = await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)), entity);
+
+            if (!result.IsAcknowledged)
+            {
+                throw new NotFoundException(ErrorConstants.NotFoundEntityError);
+            }
         }
 
         public async Task DeleteAsync(string id)
         {
-            await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
+            var result = await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
+
+            if (result.DeletedCount < 1)
+            {
+                throw new NotFoundException(ErrorConstants.NotFoundEntityError);
+            }
         }
     }
 }

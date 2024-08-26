@@ -8,8 +8,8 @@ namespace Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory
 {
     public interface IMongoRepository<T> where T : class
     {
-        Task<List<T>> GetAllAsync();
-        Task<T> GetByIdAsync(string id);
+        Task<List<T>> GetAllAsync(int page, int count, CancellationToken cancellationToken = default);
+        Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
         Task AddAsync(T entity);
         Task UpdateAsync(string id, T entity);
         Task DeleteAsync(string id);

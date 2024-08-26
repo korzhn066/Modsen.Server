@@ -1,39 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Modsen.Server.CarsControl.Business.UseCases.Processing;
-using MongoDB.Bson;
-
-//C:\mongodb\bin\mongod
+using Modsen.Server.CarsControl.Business.Interfaces;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
-    public class CarsProcessingController : ControllerBase
+    public class CarsProcessingController(IProcessingCarService processingCarService) : ControllerBase
     {
-        private readonly GetCarsFromProcessingUseCase _getCarsFromProcessingUseCase;
-        private readonly AddCarToProcessingUseCase _addCarToProcessingUseCase;
-        private readonly UpdateCarFromProcessingUseCase _updateCarFromProcessingUseCase;
-        private readonly RemoveCarFromProcessingUseCase _removeCarFromProcessingUseCase;
-
-        public CarsProcessingController(
-            GetCarsFromProcessingUseCase getCarsFromProcessingUseCase,
-            AddCarToProcessingUseCase addCarToProcessingUseCase,
-            UpdateCarFromProcessingUseCase updateCarFromProcessingUseCase,
-            RemoveCarFromProcessingUseCase removeCarFromProcessingUseCase)
-        {
-            _addCarToProcessingUseCase = addCarToProcessingUseCase;
-            _getCarsFromProcessingUseCase = getCarsFromProcessingUseCase;
-            _updateCarFromProcessingUseCase = updateCarFromProcessingUseCase;
-            _removeCarFromProcessingUseCase = removeCarFromProcessingUseCase;
-        }
+        private readonly IProcessingCarService _processingCarService = processingCarService;
 
         [HttpPost]
         [Route("remove_car")]
-        public async Task<IActionResult> RemoveCar(string id)
+        public async Task<IActionResult> DeleteCar(string id)
         {
-            await _removeCarFromProcessingUseCase.RemoveCarAsync(id);
+            await _processingCarService.DeleteCarAsync(id);
 
             return NoContent();
         }
@@ -42,7 +23,7 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         [Route("update_car")]
         public async Task<IActionResult> UpdateCar(string id, string json)
         {
-            await _updateCarFromProcessingUseCase.UpdateCarAsync(id, BsonDocument.Parse(json));
+            await _processingCarService.UpdateCarAsync(id, json);
 
             return NoContent();
         }
@@ -51,21 +32,27 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         [Route("add_car")]
         public async Task<IActionResult> AddCar(string json)
         {
-            await _addCarToProcessingUseCase.AddCarAsync(BsonDocument.Parse(json));
+            await _processingCarService.AddCarAsync(json);
 
             return NoContent();
         }
 
         [HttpGet]
         [Route("cars")]
-        public async Task<IActionResult> GetCars()
+        public async Task<IActionResult> GetCars(int page, int count, CancellationToken cancellationToken)
         {
-            var cars = await _getCarsFromProcessingUseCase.GetCarsAsync();
+            var cars = await _processingCarService.GetCarsAsync(page, count, cancellationToken);
 
-            return Ok(new
-            {
-                cars = cars
-            });
+            return Ok(cars);
+        }
+
+        [HttpGet]
+        [Route("car")]
+        public async Task<IActionResult> GetCar(string id, CancellationToken cancellationToken)
+        {
+            var cars = await _processingCarService.GetCarAsync(id, cancellationToken);
+
+            return Ok(cars);
         }
     }
 }

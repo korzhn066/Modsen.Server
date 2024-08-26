@@ -1,6 +1,7 @@
 using Modsen.Server.CarsControl.DataAccess;
 using Modsen.Server.CarsControl.Business;
 using MongoDB.Driver;
+using Modsen.Server.CarsControl.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +29,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandlerMiddleware();
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

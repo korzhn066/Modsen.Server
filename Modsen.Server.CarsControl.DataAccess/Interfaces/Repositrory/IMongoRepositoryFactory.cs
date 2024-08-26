@@ -8,6 +8,6 @@ namespace Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory
 {
     public interface IMongoRepositoryFactory<T> where T : class
     {
-        IMongoRepository<T> Create(string parametr);
+        IMongoRepository<T> Create(string collection);
     }
 }

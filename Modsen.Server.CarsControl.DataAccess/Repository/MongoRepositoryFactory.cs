@@ -17,9 +17,9 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
             _database = database;
         }
 
-        public IMongoRepository<T> Create(string parametr)
+        public IMongoRepository<T> Create(string collection)
         {
-            return new MongoRepository<T>(_database, parametr);
+            return new MongoRepository<T>(_database, collection);
         }
     }
 }

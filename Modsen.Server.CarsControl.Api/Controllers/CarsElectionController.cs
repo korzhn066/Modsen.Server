@@ -1,42 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Modsen.Server.CarsControl.Business.UseCases.Election;
-using Modsen.Server.CarsControl.Business.UseCases.Rent;
-using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
-using Modsen.Server.CarsControl.DataAccess.Repository;
-using MongoDB.Bson;
-
-//C:\mongodb\bin\mongod
+using Modsen.Server.CarsControl.Business.Interfaces;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
-    public class CarsElectionController : ControllerBase
+    public class CarsElectionController(IElectionsCarService electionsCarService) : ControllerBase
     {
-        private readonly GetCarsFromElectionUseCase _getCarsFromElectionUseCase;
-        private readonly AddCarToElectionUseCase _addCarToElectionUseCase;
-        private readonly UpdateCarFromElectionUseCase _updateCarFromElectionUseCase;
-        private readonly RemoveCarFromElectionUseCase _removeCarFromElectionUseCase;
-
-        public CarsElectionController(
-            GetCarsFromElectionUseCase getCarsFromElectionUseCase,
-            AddCarToElectionUseCase addCarToElectionUseCase,
-            UpdateCarFromElectionUseCase updateCarFromElectionUseCase,
-            RemoveCarFromElectionUseCase removeCarFromElectionUseCase)
-        {
-            _addCarToElectionUseCase = addCarToElectionUseCase;
-            _getCarsFromElectionUseCase = getCarsFromElectionUseCase;
-            _updateCarFromElectionUseCase = updateCarFromElectionUseCase;
-            _removeCarFromElectionUseCase = removeCarFromElectionUseCase;
-        }
+        private readonly IElectionsCarService _electionsCarService = electionsCarService;
 
         [HttpPost]
         [Route("remove_car")]
-        public async Task<IActionResult> RemoveCar(string id)
+        public async Task<IActionResult> DeleteCar(string id)
         {
-            await _removeCarFromElectionUseCase.RemoveCarAsync(id);
+            await _electionsCarService.DeleteCarAsync(id);
 
             return NoContent();
         }
@@ -45,7 +23,7 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         [Route("update_car")]
         public async Task<IActionResult> UpdateCar(string id, string json)
         {
-            await _updateCarFromElectionUseCase.UpdateCarAsync(id, BsonDocument.Parse(json));
+            await _electionsCarService.UpdateCarAsync(id, json);
 
             return NoContent();
         }
@@ -54,21 +32,27 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         [Route("add_car")]
         public async Task<IActionResult> AddCar(string json)
         {
-            await _addCarToElectionUseCase.AddCarAsync(BsonDocument.Parse(json));
+            await _electionsCarService.AddCarAsync(json);
 
             return NoContent();
         }
 
         [HttpGet]
         [Route("cars")]
-        public async Task<IActionResult> GetCars()
+        public async Task<IActionResult> GetCars(int page, int count, CancellationToken cancellationToken)
         {
-            var cars = await _getCarsFromElectionUseCase.GetCarsAsync();
+            var cars = await _electionsCarService.GetCarsAsync(page, count, cancellationToken);
 
-            return Ok(new
-            {
-                cars = cars
-            });
+            return Ok(cars);
+        }
+
+        [HttpGet]
+        [Route("car")]
+        public async Task<IActionResult> GetCar(string id, CancellationToken cancellationToken)
+        {
+            var cars = await _electionsCarService.GetCarAsync(id, cancellationToken);
+
+            return Ok(cars);
         }
     }
 }
