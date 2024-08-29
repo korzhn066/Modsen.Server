@@ -3,9 +3,47 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modsen.Server.CarsElections", "Modsen.Server.CarsElections", "{F1EA9E95-8838-4E76-BD94-F236E226F1C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modsen.Server.CarsElections.Domain", "Modsen.Server.CarsElections.Domain\Modsen.Server.CarsElections.Domain.csproj", "{7D57BB29-71A7-4862-B915-DEF85628C4CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modsen.Server.CarsElections.Application", "Modsen.Server.CarsElections.Application\Modsen.Server.CarsElections.Application.csproj", "{DC2DD4FB-07A3-4620-B927-D985DA1EDA41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modsen.Server.CarsElections.Infrastructure", "Modsen.Server.CarsElections.Infrastructure\Modsen.Server.CarsElections.Infrastructure.csproj", "{73D6EA6D-3564-48F2-A267-1E86C500F018}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modsen.Server.CarsElections.Api", "Modsen.Server.CarsElections.Api\Modsen.Server.CarsElections.Api.csproj", "{7C271069-C768-4437-9963-ED8E8224387C}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D57BB29-71A7-4862-B915-DEF85628C4CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D57BB29-71A7-4862-B915-DEF85628C4CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D57BB29-71A7-4862-B915-DEF85628C4CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D57BB29-71A7-4862-B915-DEF85628C4CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC2DD4FB-07A3-4620-B927-D985DA1EDA41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC2DD4FB-07A3-4620-B927-D985DA1EDA41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC2DD4FB-07A3-4620-B927-D985DA1EDA41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC2DD4FB-07A3-4620-B927-D985DA1EDA41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D6EA6D-3564-48F2-A267-1E86C500F018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D6EA6D-3564-48F2-A267-1E86C500F018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D6EA6D-3564-48F2-A267-1E86C500F018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D6EA6D-3564-48F2-A267-1E86C500F018}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C271069-C768-4437-9963-ED8E8224387C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C271069-C768-4437-9963-ED8E8224387C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C271069-C768-4437-9963-ED8E8224387C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C271069-C768-4437-9963-ED8E8224387C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D57BB29-71A7-4862-B915-DEF85628C4CA} = {F1EA9E95-8838-4E76-BD94-F236E226F1C8}
+		{DC2DD4FB-07A3-4620-B927-D985DA1EDA41} = {F1EA9E95-8838-4E76-BD94-F236E226F1C8}
+		{73D6EA6D-3564-48F2-A267-1E86C500F018} = {F1EA9E95-8838-4E76-BD94-F236E226F1C8}
+		{7C271069-C768-4437-9963-ED8E8224387C} = {F1EA9E95-8838-4E76-BD94-F236E226F1C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C25981C2-1466-4DAD-B4D2-A4F7B71EF54D}
