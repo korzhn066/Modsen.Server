@@ -1,4 +1,4 @@
-﻿using Modsen.Server.CarsElections.Domain.Enums;;
+﻿using Modsen.Server.CarsElections.Domain.Enums;
 
 namespace Modsen.Server.CarsElections.Domain.Entities
 {
