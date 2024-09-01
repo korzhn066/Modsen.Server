@@ -1,24 +1,15 @@
 using Modsen.Server.CarsControl.DataAccess;
 using Modsen.Server.CarsControl.Business;
-using MongoDB.Driver;
 using Modsen.Server.CarsControl.Api;
+using Modsen.Server.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddSingleton(
-    new MongoClient(builder.Configuration["MongoDbSettings:ConnectionString"])
-    .GetDatabase(builder.Configuration["MongoDbSettings:DataBaseName"]));
-
 builder.Services
-    .AddDataAccess()
-    .AddBusiness();
+    .AddPresintation()
+    .AddDataAccess(builder)
+    .AddBusiness()
+    .AddShared();
 
 var app = builder.Build();
 

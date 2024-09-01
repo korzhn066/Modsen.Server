@@ -4,14 +4,15 @@ using Modsen.Server.CarsControl.Business.Interfaces;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/processing-cars/")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class CarsProcessingController(IProcessingCarService processingCarService) : ControllerBase
     {
         private readonly IProcessingCarService _processingCarService = processingCarService;
 
-        [HttpPost]
-        [Route("remove_car")]
+        [HttpDelete]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteCar(string id)
         {
             await _processingCarService.DeleteCarAsync(id);
@@ -19,8 +20,8 @@ namespace Modsen.Server.CarsControl.Api.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        [Route("update_car")]
+        [HttpPut]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateCar(string id, string json)
         {
             await _processingCarService.UpdateCarAsync(id, json);
@@ -29,7 +30,6 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpPost]
-        [Route("add_car")]
         public async Task<IActionResult> AddCar(string json)
         {
             await _processingCarService.AddCarAsync(json);
@@ -38,7 +38,6 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpGet]
-        [Route("cars")]
         public async Task<IActionResult> GetCars(int page, int count, CancellationToken cancellationToken)
         {
             var cars = await _processingCarService.GetCarsAsync(page, count, cancellationToken);
@@ -47,7 +46,7 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpGet]
-        [Route("car")]
+        [Route("{id}")]
         public async Task<IActionResult> GetCar(string id, CancellationToken cancellationToken)
         {
             var cars = await _processingCarService.GetCarAsync(id, cancellationToken);

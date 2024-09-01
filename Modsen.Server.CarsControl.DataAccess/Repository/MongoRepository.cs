@@ -12,14 +12,9 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
 
         public async Task<List<T>> GetAllAsync(int page, int count, CancellationToken cancellationToken = default)
         {
-            if (page == -1)
-            {
-                return await _collection.Find(new BsonDocument()).ToListAsync(cancellationToken);
-            }
-
             return await _collection
                 .Find(new BsonDocument())
-                .Skip(page * count)
+                .Skip((page - 1) * count)
                 .Limit(count)
                 .ToListAsync(cancellationToken);
         }
