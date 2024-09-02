@@ -8,7 +8,11 @@ namespace Modsen.Server.CarsElections.Application.Mapper
     {
         public CommentMappingProfile()
         {
-            CreateMap<AddComment, Comment>();
+            CreateMap<AddComment, Comment>()
+                .ForMember(destination => destination.CarId, options => options.MapFrom(source => source.CarId))
+                .ForMember(destination => destination.Message, options => options.MapFrom(source => source.Message))
+                .ForMember(destination => destination.Type, options => options.MapFrom(source => source.CommentType))
+                .ForMember(destination => destination.DateTime, options => options.MapFrom(source => source.CreatedAt));
         }
     }
 }

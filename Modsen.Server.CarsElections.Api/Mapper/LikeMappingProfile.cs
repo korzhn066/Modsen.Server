@@ -8,7 +8,9 @@ namespace Modsen.Server.CarsElections.Api.Mapper
     {
         public LikeMappingProfile()
         {
-            CreateMap<LikeRequest, PutLike>();
+            CreateMap<LikeRequest, PutLike>()
+                .ForMember(destination => destination.LikeType, options => options.MapFrom(source => source.LikeType))
+                .ForMember(destination => destination.CommentId, options => options.MapFrom(source => source.CommentId));
         }
     }
 }
