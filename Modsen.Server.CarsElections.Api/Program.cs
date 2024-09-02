@@ -1,3 +1,4 @@
+using Modsen.Server.CarsElections.Api;
 using Modsen.Server.CarsElections.Api.Mapper;
 using Modsen.Server.CarsElections.Api.MiddlewareExtensions;
 using Modsen.Server.CarsElections.Application;
@@ -6,20 +7,10 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers().AddJsonOptions(x =>
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services
+    .AddPresentation()
     .AddInfrastructure(builder)
     .AddApplication();
-
-builder.Services.AddAutoMapper(typeof(RequestMappingProfile), typeof(ResponseMappingProfile));
 
 var app = builder.Build();
 

@@ -8,7 +8,7 @@ using Modsen.Server.CarsElections.Application.Features.Comment.Queries;
 
 namespace Modsen.Server.CarsElections.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/comments")]
     [ApiController]
     public class CommentController(
         IMediator mediator,
@@ -18,7 +18,6 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         private readonly IMapper _mapper = mapper;
 
         [HttpPost]
-        [Route("add_comment")]
         public async Task<IActionResult> AddComment(CommentRequest commentRequest, CancellationToken cancellationToken)
         {
             var addComment = _mapper.Map<AddComment>(commentRequest);
@@ -30,19 +29,18 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         }
 
         [HttpDelete]
-        [Route("delete_comment")]
-        public async Task<IActionResult> DeleteComment(int commentId, CancellationToken cancellationToken)
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteComment(int id, CancellationToken cancellationToken)
         {
             await _mediator.Send(new DeleteComment
             {
-                CommentId = commentId,
+                CommentId = id,
             }, cancellationToken);
 
             return NoContent();
         }
 
-        [HttpPost]
-        [Route("update_comment")]
+        [HttpPut]
         public async Task<IActionResult> UpdateComment(
             UpdateComment updateComment,
             CancellationToken cancellationToken)
@@ -53,12 +51,11 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         }
 
         [HttpGet]
-        [Route("comment")]
         public async Task<IActionResult> GetComment(string carId, CancellationToken cancellationToken)
         {
             var comment = await _mediator.Send(new GetCommentByUserName
             {
-                UserName = "Test",
+                UserName = "Test1",
                 CarId = carId
             }, cancellationToken);
 

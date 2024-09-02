@@ -7,7 +7,7 @@ using Modsen.Server.CarsElections.Domain.Enums;
 
 namespace Modsen.Server.CarsElections.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/likes/")]
     [ApiController]
     public class LikeController(
         IMediator mediator,
@@ -17,7 +17,6 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         private readonly IMapper _mapper = mapper;
 
         [HttpPost]
-        [Route("put_like")]
         public async Task<IActionResult> PutLike(LikeRequest likeRequest, CancellationToken cancellationToken)
         {
             var putLike = _mapper.Map<PutLike>(likeRequest);

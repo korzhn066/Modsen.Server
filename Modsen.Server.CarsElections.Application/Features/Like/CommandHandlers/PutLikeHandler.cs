@@ -24,7 +24,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Like.CommandHandlers
         public async Task Handle(PutLike request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.Query
-                .GetQuery(new UserUserNameSpecification(request.UserName))
+                .GetQuery(new GetUserByUserNameSpecification(request.UserName))
                 .FirstOrDefaultAsync(cancellationToken)
                 ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
 

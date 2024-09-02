@@ -6,7 +6,7 @@ using Modsen.Server.CarsElections.Application.Features.Car.Queries;
 
 namespace Modsen.Server.CarsElections.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/cars/")]
     [ApiController]
     public class CarsController(
         IMediator mediator,
@@ -16,7 +16,7 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         private readonly IMapper _mapper = mapper;
 
         [HttpGet]
-        [Route("winning_car")]
+        [Route("winning")]
         public async Task<IActionResult> GetWiningCar(CancellationToken cancellationToken)
         {
             var car = await _mediator.Send(new GetCurrentWinningCar(), cancellationToken);
@@ -25,12 +25,12 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         }
 
         [HttpGet]
-        [Route("car_comments")]
-        public async Task<IActionResult> GetCarComments(string carId, int page, int count, CancellationToken cancellationToken)
+        [Route("{id}/comments")]
+        public async Task<IActionResult> GetCarComments(string id, int page, int count, CancellationToken cancellationToken)
         {
             var cars = await _mediator.Send(new GetCarComments
             {
-                CarId = carId,
+                CarId = id,
                 Page = page,
                 Count = count
             }, cancellationToken);

@@ -4,9 +4,9 @@ using Modsen.Server.CarsElections.Domain.Entities;
 
 namespace Modsen.Server.CarsElections.Application.Mapper
 {
-    public class AppMappingProfile : Profile
+    public class CommentMappingProfile : Profile
     {
-        public AppMappingProfile()
+        public CommentMappingProfile()
         {
             CreateMap<AddComment, Comment>();
         }

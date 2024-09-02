@@ -28,7 +28,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
             var comment = _mapper.Map<Domain.Entities.Comment>(request);
 
             var user = await _userRepository.Query
-                .GetQuery(new UserUserNameSpecification(request.UserName))
+                .GetQuery(new GetUserByUserNameSpecification(request.UserName))
                 .FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
          
             await _likeRepository.AddAsync(new Domain.Entities.Like

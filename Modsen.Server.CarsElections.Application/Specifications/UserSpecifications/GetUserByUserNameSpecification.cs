@@ -3,8 +3,7 @@ using Modsen.Server.CarsElections.Domain.Entities;
 
 namespace Modsen.Server.CarsElections.Application.Specifications.UserSpecifications
 {
-    internal class UserUserNameSpecification : SpecificationBase<User>
+    internal class GetUserByUserNameSpecification(string userName) : SpecificationBase<User>(User => User.UserName == userName)
     {
-        public UserUserNameSpecification(string userName) : base(User => User.UserName == userName) { }
     }
 }

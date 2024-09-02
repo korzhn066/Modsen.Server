@@ -5,7 +5,7 @@ namespace Modsen.Server.CarsElections.Application.Specifications.UserSpecificati
 {
     internal class IncludeUserLikesSpecification : SpecificationBase<User>
     {
-        public IncludeUserLikesSpecification() 
+        public IncludeUserLikesSpecification()
         {
             AddInclude(User => User.Likes);
         }

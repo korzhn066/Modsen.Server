@@ -10,8 +10,11 @@ namespace Modsen.Server.CarsElections.Domain.Interfaces.Repositories.Base
     public interface IRepositoryBase<T> where T : class
     {
         IQueryable<T> Query {  get; }
+
         Task AddAsync(T entity, CancellationToken cancellationToken = default);
+        
         void Delete(T entity);
+        
         Task SaveChangesAsync();
     }
 }
