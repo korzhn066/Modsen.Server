@@ -12,8 +12,8 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
     {
         private readonly IMongoDatabase _database;
 
-        public MongoRepositoryFactory(IMongoDatabase database) 
-        { 
+        public MongoRepositoryFactory(IMongoDatabase database)
+        {
             _database = database;
         }
 

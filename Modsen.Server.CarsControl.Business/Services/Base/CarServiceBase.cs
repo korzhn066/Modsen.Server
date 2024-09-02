@@ -1,5 +1,8 @@
-﻿using Modsen.Server.CarsControl.Business.Interfaces.Base;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Modsen.Server.CarsControl.Business.Interfaces.Base;
 using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
+using Modsen.Server.Shared.Constants;
+using Modsen.Server.Shared.Exceptions;
 using MongoDB.Bson;
 
 namespace Modsen.Server.CarsControl.Business.Services.Base
@@ -15,7 +18,12 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 
         public async Task DeleteCarAsync(string carId)
         {
-            await MongoRepository.DeleteAsync(carId);
+            var result = await MongoRepository.DeleteAsync(carId);
+
+            if (result.DeletedCount < 1)
+            {
+                throw new NotFoundException(ErrorConstants.NotFoundEntityError);
+            }
         }
 
         public async Task<string> GetCarAsync(string carId, CancellationToken cancellationTokend)
@@ -35,7 +43,12 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 
         public async Task UpdateCarAsync(string carId, string car)
         {
-            await MongoRepository.UpdateAsync(carId, BsonDocument.Parse(car));
+            var result = await MongoRepository.UpdateAsync(carId, BsonDocument.Parse(car));
+        
+            if (!result.IsAcknowledged)
+            {
+                throw new NotFoundException(ErrorConstants.NotFoundEntityError);
+            }
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
-using Modsen.Server.Shared.Constants;
-using Modsen.Server.Shared.Exceptions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -19,13 +17,11 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            var item = await _collection
+            return await _collection
                 .Find(Builders<T>.Filter.Eq("_id", new ObjectId(id)))
                 .FirstOrDefaultAsync(cancellationToken);
-
-            return (T?)item ?? throw new NotFoundException(ErrorConstants.NotFoundEntityError);
         }
 
         public async Task AddAsync(T entity)
@@ -33,24 +29,14 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
             await _collection.InsertOneAsync(entity);
         }
 
-        public async Task UpdateAsync(string id, T entity)
+        public async Task<ReplaceOneResult> UpdateAsync(string id, T entity)
         {
-            var result = await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)), entity);
-
-            if (!result.IsAcknowledged)
-            {
-                throw new NotFoundException(ErrorConstants.NotFoundEntityError);
-            }
+            return await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)), entity);
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task<DeleteResult> DeleteAsync(string id)
         {
-            var result = await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
-
-            if (result.DeletedCount < 1)
-            {
-                throw new NotFoundException(ErrorConstants.NotFoundEntityError);
-            }
+            return await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
         }
     }
 }
