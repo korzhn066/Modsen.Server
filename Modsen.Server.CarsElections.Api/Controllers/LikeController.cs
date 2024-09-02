@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Modsen.Server.CarsElections.Api.Models.Requests;
 using Modsen.Server.CarsElections.Application.Features.Like.Command;
-using Modsen.Server.CarsElections.Domain.Enums;
+using Modsen.Server.Shared.Helpers;
 
 namespace Modsen.Server.CarsElections.Api.Controllers
 {
@@ -20,7 +20,7 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         public async Task<IActionResult> PutLike(LikeRequest likeRequest, CancellationToken cancellationToken)
         {
             var putLike = _mapper.Map<PutLike>(likeRequest);
-            putLike.UserName = "Test";
+            putLike.UserName = AuthenticateHelper.GetUserName(HttpContext);
 
             await _mediator.Send(putLike, cancellationToken);
 

@@ -1,7 +1,8 @@
-﻿using Modsen.Server.CarsElections.Domain.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
+using Modsen.Server.Shared.Exceptions;
 using Newtonsoft.Json;
 
-namespace Modsen.Server.CarsElections.Api.Middlewares
+namespace Modsen.Server.Shared.Middlewares
 {
     public class ExceptionHandlerMiddleware(RequestDelegate next)
     {

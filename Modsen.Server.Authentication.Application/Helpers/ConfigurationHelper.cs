@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Modsen.Server.Authentication.Domain.Constants;
-using Modsen.Server.Authentication.Domain.Exceptions;
+using Modsen.Server.Shared.Constants;
 
 namespace Modsen.Server.Authentication.Application.Helpers
 {
