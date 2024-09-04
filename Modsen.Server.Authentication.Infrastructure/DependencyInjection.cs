@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using MassTransit;
+using Modsen.Server.Shared.Models.Kafka;
 
 namespace Modsen.Server.Authentication.Infrastructure
 {
@@ -55,6 +57,18 @@ namespace Modsen.Server.Authentication.Infrastructure
                 });
 
             services.AddScoped<ITokenProviderService, TokenProviderService>();
+
+            services.AddMassTransit(options =>
+            {
+                options.UsingInMemory();
+
+                options.AddRider(rider =>
+                {
+                    rider.AddProducer<UserCreated>("User");
+
+                    rider.UsingKafka((context, k) => k.Host(builder.Configuration["Kafka:BootstrapServers"]));
+                });
+            });
 
             return services;
         }

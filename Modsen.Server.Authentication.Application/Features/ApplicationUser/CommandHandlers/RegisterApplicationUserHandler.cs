@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
@@ -7,16 +9,21 @@ using Modsen.Server.Authentication.Domain.Constants;
 using Modsen.Server.Authentication.Domain.Enums;
 using Modsen.Server.Authentication.Domain.Exceptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
+using Modsen.Server.Shared.Models.Kafka;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers
 {
     public class RegisterApplicationUserHandler(
         UserManager<Domain.Entities.ApplicationUser> userManager,
-        ITokenProviderService tokenProviderService)
+        ITokenProviderService tokenProviderService,
+        ITopicProducer<UserCreated> topicProducer,
+        IMapper mapper)
         : IRequestHandler<RegisterApplicationUser, TokenModel>
     {
         private readonly UserManager<Domain.Entities.ApplicationUser> _userManager = userManager;
         private readonly ITokenProviderService _tokenProviderService = tokenProviderService;
+        private readonly ITopicProducer<UserCreated> _topicProducer = topicProducer;
+        private readonly IMapper _mapper = mapper;   
 
         public async Task<TokenModel> Handle(RegisterApplicationUser request, CancellationToken cancellationToken)
         {
@@ -45,6 +52,10 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
             {
                 throw new DbUpdateException(ErrorConstants.ServerSideError);
             }
+
+            await _topicProducer.Produce(
+                _mapper.Map<UserCreated>(user),
+                cancellationToken);
 
             return new TokenModel
             {
