@@ -7,15 +7,15 @@ using Modsen.Server.Authentication.Domain.Enums;
 
 namespace Modsen.Server.Authentication.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users/")]
     [ApiController]
     [Authorize(Roles = "Admin")]
     public class UsersController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpPost]
-        [Route("deny_admin_role")]
+        [HttpDelete]
+        [Route("admin-role")]
         public async Task<IActionResult> DenyAdminRole(string userId)
         {
             await _mediator.Send(new DenyApplicationUserRoleById
@@ -27,8 +27,8 @@ namespace Modsen.Server.Authentication.Api.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        [Route("add_admin_role")]
+        [HttpPut]
+        [Route("/admin-role")]
         public async Task<IActionResult> AddAdminRole(string userId)
         {
             await _mediator.Send(new AddApplicationUserToRoleById
@@ -40,8 +40,8 @@ namespace Modsen.Server.Authentication.Api.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        [Route("change_user_status")]
+        [HttpPut]
+        [Route("/status")]
         public async Task<IActionResult> ChangeUserStatus(string userId, UserStatus userStatus)
         {
             await _mediator.Send(new ChangeApplicationUserStatus
@@ -54,7 +54,6 @@ namespace Modsen.Server.Authentication.Api.Controllers
         }
 
         [HttpGet]
-        [Route("users")]
         public async Task<IActionResult> GetUsers(int page, int count)
         {
             var users = await _mediator.Send(new GetApplicationUsers
@@ -67,7 +66,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
         }
 
         [HttpGet]
-        [Route("user")]
+        [Route("{userName}")]
         public async Task<IActionResult> GetUser(string userName)
         {
             var user = await _mediator.Send(new GetApplicationUserByUsername

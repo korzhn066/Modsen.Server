@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Modsen.Server.Authentication.Domain.Enums
+﻿namespace Modsen.Server.Authentication.Domain.Enums
 {
     public enum UserStatus
     {

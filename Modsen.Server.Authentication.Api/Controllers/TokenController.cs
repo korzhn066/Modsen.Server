@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Modsen.Server.Authentication.Api.Helpers;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
 using Modsen.Server.Authentication.Application.Helpers;
+using Modsen.Server.Shared.Helpers;
 
 namespace Modsen.Server.Authentication.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tokens/")]
     [ApiController]
     public class TokenController(
         IConfiguration configuration,
@@ -16,14 +17,13 @@ namespace Modsen.Server.Authentication.Api.Controllers
         private readonly IMediator _mediator = mediator;
         private readonly int _refreshTokenValidityInDays = ConfigurationHelper.GetRefreshTokenValidityInDays(configuration);
 
-        [HttpPost]
-        [Route("refresh")]
+        [HttpGet]
         public async Task<IActionResult> Refresh()
         {
             var tokenModel = await _mediator.Send(new RefreshToken
             {
-                OldAccessToken = AuthenticateHelper.GetAccessToken(HttpContext),
-                OldRefreshToken = AuthenticateHelper.GetRefreshToken(HttpContext),
+                OldAccessToken = TokenHelper.GetAccessToken(HttpContext),
+                OldRefreshToken = TokenHelper.GetRefreshToken(HttpContext),
                 RefreshTokenValidityInDays = _refreshTokenValidityInDays
             });
 
@@ -32,8 +32,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
             return Ok(tokenModel.AccessToken);
         }
         
-        [HttpPost, Authorize]
-        [Route("revoke")]
+        [HttpDelete, Authorize]
         public async Task<IActionResult> Revoke()
         {
             await _mediator.Send(new ChangeApplicationUserRefreshToken

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
 using Modsen.Server.Authentication.Application.Models.Authentication;
-using Modsen.Server.Authentication.Domain.Constants;
+using Modsen.Server.Shared.Constants;
 using Modsen.Server.Authentication.Domain.Enums;
-using Modsen.Server.Authentication.Domain.Exceptions;
+using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers

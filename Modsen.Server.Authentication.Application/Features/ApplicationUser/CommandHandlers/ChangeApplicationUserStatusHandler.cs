@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
-using Modsen.Server.Authentication.Domain.Constants;
-using Modsen.Server.Authentication.Domain.Exeptions;
+using Modsen.Server.Shared.Constants;
+using Modsen.Server.Shared.Exceptions;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers
 {

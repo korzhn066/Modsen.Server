@@ -5,10 +5,8 @@ using Modsen.Server.Authentication.Infrastructure.Data.Seeds;
 
 namespace Modsen.Server.Authentication.Infrastructure.Data
 {
-    public class DBContext : IdentityDbContext<ApplicationUser>
+    public class DBContext(DbContextOptions options) : IdentityDbContext<ApplicationUser>(options)
     {
-        public DBContext(DbContextOptions options) : base(options) { }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.SeedApplicationUsers();

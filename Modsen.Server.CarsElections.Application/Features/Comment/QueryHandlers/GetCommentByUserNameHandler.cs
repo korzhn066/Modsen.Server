@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Modsen.Server.CarsElections.Application.Features.Comment.Queries;
 using Modsen.Server.CarsElections.Application.Specifications;
 using Modsen.Server.CarsElections.Application.Specifications.LikeSpecifications;
-using Modsen.Server.CarsElections.Domain.Constants;
-using Modsen.Server.CarsElections.Domain.Exceptions;
+using Modsen.Server.Shared.Constants;
+using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
 
 namespace Modsen.Server.CarsElections.Application.Features.Comment.QueryHandlers
