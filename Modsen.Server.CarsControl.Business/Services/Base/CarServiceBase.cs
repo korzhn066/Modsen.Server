@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Modsen.Server.CarsControl.Business.Interfaces.Base;
+using Modsen.Server.CarsControl.DataAccess.Entities;
 using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
+using Modsen.Server.CarsControl.DataAccess.Interfaces.Services;
 using Modsen.Server.Shared.Constants;
 using Modsen.Server.Shared.Exceptions;
 using MongoDB.Bson;
 
 namespace Modsen.Server.CarsControl.Business.Services.Base
 {
-    public abstract class CarServiceBase(IMongoRepository<BsonDocument> mongoRepository) : ICarServiceBase
+    public abstract class CarServiceBase(
+        IMongoRepository mongoRepository,
+        IGrpcService grpcService) : ICarServiceBase
     {
-        protected readonly IMongoRepository<BsonDocument> MongoRepository = mongoRepository;
+        protected readonly IMongoRepository MongoRepository = mongoRepository;
+        private readonly IGrpcService _grpcService = grpcService;
 
         public async Task AddCarAsync(string car)
         {
-            await MongoRepository.AddAsync(BsonDocument.Parse(car));
+            var id = await MongoRepository.AddAsync(new CarDocument { Content = BsonDocument.Parse(car) });
+
+            await _grpcService.AddCarAsync(id);
         }
 
         public async Task DeleteCarAsync(string carId)
@@ -44,7 +51,7 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
         public async Task UpdateCarAsync(string carId, string car)
         {
             var result = await MongoRepository.UpdateAsync(carId, BsonDocument.Parse(car));
-        
+
             if (!result.IsAcknowledged)
             {
                 throw new NotFoundException(ErrorConstants.NotFoundEntityError);

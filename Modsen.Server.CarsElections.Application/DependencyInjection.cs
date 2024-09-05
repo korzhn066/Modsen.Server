@@ -10,7 +10,7 @@ namespace Modsen.Server.CarsElections.Application
             services.AddMediatR(configuration =>
                 configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
-            services.AddAutoMapper(typeof(CommentMappingProfile));
+            services.AddAutoMapper(typeof(CommentMappingProfile), typeof(CarMappingProfile));
 
             return services;
         }

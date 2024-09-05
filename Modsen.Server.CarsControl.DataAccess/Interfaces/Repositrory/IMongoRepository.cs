@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+﻿using Modsen.Server.CarsControl.DataAccess.Entities;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory
 {
-    public interface IMongoRepository<T> where T : class
+    public interface IMongoRepository
     {
-        Task<List<T>> GetAllAsync(int page, int count, CancellationToken cancellationToken = default);
+        Task<List<CarDocument>> GetAllAsync(int page, int count, CancellationToken cancellationToken = default);
 
-        Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+        Task<CarDocument?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
         
-        Task AddAsync(T entity);
+        Task<string> AddAsync(CarDocument entity);
         
-        Task<ReplaceOneResult> UpdateAsync(string id, T entity);
+        Task<UpdateResult> UpdateAsync(string id, BsonDocument entity);
         
         Task<DeleteResult> DeleteAsync(string id);
     }

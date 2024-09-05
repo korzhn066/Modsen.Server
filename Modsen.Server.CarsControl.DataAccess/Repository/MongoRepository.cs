@@ -1,14 +1,15 @@
-﻿using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
+﻿using Modsen.Server.CarsControl.DataAccess.Entities;
+using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Modsen.Server.CarsControl.DataAccess.Repository
 {
-    internal class MongoRepository<T>(IMongoDatabase database, string collectionName) : IMongoRepository<T> where T : class
+    internal class MongoRepository(IMongoDatabase database, string collectionName) : IMongoRepository
     {
-        private readonly IMongoCollection<T> _collection = database.GetCollection<T>(collectionName);
+        private readonly IMongoCollection<CarDocument> _collection = database.GetCollection<CarDocument>(collectionName);
 
-        public async Task<List<T>> GetAllAsync(int page, int count, CancellationToken cancellationToken = default)
+        public async Task<List<CarDocument>> GetAllAsync(int page, int count, CancellationToken cancellationToken = default)
         {
             return await _collection
                 .Find(new BsonDocument())
@@ -17,26 +18,31 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<CarDocument?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             return await _collection
-                .Find(Builders<T>.Filter.Eq("_id", new ObjectId(id)))
+                .Find(Builders<CarDocument>.Filter.Eq("Id", new ObjectId(id)))
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<string> AddAsync(CarDocument entity)
         {
             await _collection.InsertOneAsync(entity);
+
+            return entity.Id.ToString();
         }
 
-        public async Task<ReplaceOneResult> UpdateAsync(string id, T entity)
+        public async Task<UpdateResult> UpdateAsync(string id, BsonDocument entity)
         {
-            return await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)), entity);
+            return await _collection.UpdateOneAsync(
+                Builders<CarDocument>.Filter.Eq("Id", new ObjectId(id)),
+                new BsonDocument("$set", new BsonDocument("Content", entity)));
         }
 
         public async Task<DeleteResult> DeleteAsync(string id)
         {
-            return await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
+            return await _collection.DeleteOneAsync(
+                Builders<CarDocument>.Filter.Eq("Id", new ObjectId(id)));
         }
     }
 }

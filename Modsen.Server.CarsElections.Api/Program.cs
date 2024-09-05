@@ -1,9 +1,8 @@
 using Modsen.Server.CarsElections.Api;
-using Modsen.Server.CarsElections.Api.Mapper;
 using Modsen.Server.CarsElections.Api.MiddlewareExtensions;
+using Modsen.Server.CarsElections.Api.Services;
 using Modsen.Server.CarsElections.Application;
 using Modsen.Server.CarsElections.Infrastructure;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +23,8 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
+
+app.MapGrpcService<CarService>();
 
 app.UseAuthorization();
 
