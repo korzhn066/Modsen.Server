@@ -13,7 +13,7 @@ namespace Modsen.Server.CarsElections.Application
         {
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
-            services.AddAutoMapper(typeof(CommentMappingProfile), typeof(UserMappingProfile));
+            services.AddAutoMapper(typeof(CommentMappingProfile), typeof(CarMappingProfile), typeof(UserMappingProfile));
 
             services.AddMediator(configuration => configuration.AddConsumer<UserCreatedConsumer>());
 

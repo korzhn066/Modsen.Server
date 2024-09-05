@@ -7,6 +7,11 @@ namespace Modsen.Server.CarsElections.Api
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services)
         {
+            services.AddGrpc(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
+
             services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 

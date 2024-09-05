@@ -1,7 +1,8 @@
 using Modsen.Server.CarsElections.Api;
-using Modsen.Server.Shared.MiddlewareExtensions;
+using Modsen.Server.CarsElections.Api.Services;
 using Modsen.Server.CarsElections.Application;
 using Modsen.Server.CarsElections.Infrastructure;
+using Modsen.Server.Shared.MiddlewareExtensions;
 using Modsen.Server.Shared;
 using Modsen.Server.Shared.Models;
 
@@ -30,6 +31,8 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
+
+app.MapGrpcService<CarService>();
 
 app.UseAuthentication();
 app.UseAuthorization();

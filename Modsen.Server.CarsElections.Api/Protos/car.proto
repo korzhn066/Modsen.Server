@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Modsen.Server.CarsElections";
+
+package greet;
+
+service Car {
+  rpc AddCar (CarRequest) returns (CarReply);
+}
+
+message CarRequest {
+  string id = 1;
+}
+
+message CarReply {
+}
