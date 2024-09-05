@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddPresentation()
     .AddInfrastructure(builder)
-    .AddApplication()
+    .AddApplication(builder.Configuration)
     .AddShared(new JwtOptions
     {
         ValidAudience = builder.Configuration["Jwt:ValidAudience"]!,
