@@ -13,7 +13,7 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Quer
         public async Task<List<Domain.Entities.ApplicationUser>> Handle(GetApplicationUsers request, CancellationToken cancellationToken)
         {
             return await _userManager.Users
-                .Skip(request.Page * request.Count)
+                .Skip((request.Page - 1) * request.Count)
                 .Take(request.Count)
                 .ToListAsync(cancellationToken);
         }

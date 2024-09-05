@@ -2,21 +2,22 @@ using Modsen.Server.Authentication.Infrastructure;
 using Modsen.Server.Authentication.Application;
 using Microsoft.AspNetCore.CookiePolicy;
 using Modsen.Server.Authentication.Api;
-using Modsen.Server.Authentication.Api.MiddlewareExtensions;
+using Modsen.Server.Shared.MiddlewareExtensions;
+using Modsen.Server.Shared;
+using Modsen.Server.Shared.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services
+    .AddPresentation()
     .AddInfrastructure(builder)
-    .AddApplication();
-    
+    .AddApplication()
+    .AddShared(new JwtOptions
+    {
+        ValidAudience = builder.Configuration["Jwt:ValidAudience"]!,
+        ValidIssuer = builder.Configuration["Jwt:ValidIssuer"]!,
+        IssuerSigningKey = builder.Configuration["Jwt:IssuerSigningKey"]!
+    });
 
 var app = builder.Build();
 

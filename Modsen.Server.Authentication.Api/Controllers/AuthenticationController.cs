@@ -7,7 +7,7 @@ using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands
 
 namespace Modsen.Server.Authentication.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authentication/")]
     [ApiController]
     public class AuthenticationController(
         IMediator mediator,

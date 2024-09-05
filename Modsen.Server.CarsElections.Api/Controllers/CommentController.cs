@@ -5,6 +5,7 @@ using Modsen.Server.CarsElections.Api.Models.Requests;
 using Modsen.Server.CarsElections.Api.Models.Responses;
 using Modsen.Server.CarsElections.Application.Features.Comment.Commands;
 using Modsen.Server.CarsElections.Application.Features.Comment.Queries;
+using Modsen.Server.Shared.Helpers;
 
 namespace Modsen.Server.CarsElections.Api.Controllers
 {
@@ -21,7 +22,7 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         public async Task<IActionResult> AddComment(CommentRequest commentRequest, CancellationToken cancellationToken)
         {
             var addComment = _mapper.Map<AddComment>(commentRequest);
-            addComment.UserName = "Test1";
+            addComment.UserName = AuthenticateHelper.GetUserName(HttpContext);
 
             await _mediator.Send(addComment, cancellationToken);
 
@@ -55,7 +56,7 @@ namespace Modsen.Server.CarsElections.Api.Controllers
         {
             var comment = await _mediator.Send(new GetCommentByUserName
             {
-                UserName = "Test1",
+                UserName = AuthenticateHelper.GetUserName(HttpContext),
                 CarId = carId
             }, cancellationToken);
 
