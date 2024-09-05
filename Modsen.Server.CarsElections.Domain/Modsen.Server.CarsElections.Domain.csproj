@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Modsen.Server.Shared\Modsen.Server.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

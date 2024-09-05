@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Modsen.Server.Shared.Constants
+﻿namespace Modsen.Server.Shared.Constants
 {
     public static class ErrorConstants
     {
@@ -15,5 +9,10 @@ namespace Modsen.Server.Shared.Constants
         public const string ServerSideError = "ServerSideError";
         public const string InvalidRefreshTokenError = "InvalidRefreshToken";
         public const string NotFoundEntityError = "NotFoundEntity";
+        public const string CarNotFoundError = "CarNotFound";
+        public const string LikeNotFoundError = "LikeNotFound";
+        public const string CommentNotFoundError = "CommentNotFound";
+        public const string CommentAlreadyExistsError = "CommentAlreadyExists";
+        public const string LikeAlreadyExistsError = "LikeAlreadyExists";
     }
 }

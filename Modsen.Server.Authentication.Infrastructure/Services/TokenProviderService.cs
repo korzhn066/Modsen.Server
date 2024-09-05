@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Modsen.Server.Authentication.Domain.Entities;
-using Modsen.Server.Authentication.Domain.Exceptions;
+using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -21,7 +21,7 @@ namespace Modsen.Server.Authentication.Infrastructure.Services
         {
             _validAudience = configuration["JWT:ValidAudience"] ?? throw new BadRequestException();
             _validIssuer = configuration["JWT:ValidIssuer"] ?? throw new BadRequestException();
-            _secretKey = configuration["JWT:SecretKey"] ?? throw new BadRequestException();
+            _secretKey = configuration["JWT:IssuerSigningKey"] ?? throw new BadRequestException();
             _accessTokenValidityInMinutes = GetAccessTokenValidityInMinutes(configuration);
         }
 
@@ -81,7 +81,7 @@ namespace Modsen.Server.Authentication.Infrastructure.Services
             if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new SecurityTokenException("Invalid token");
-            } 
+            }
             
             return principal;
         }
@@ -89,7 +89,7 @@ namespace Modsen.Server.Authentication.Infrastructure.Services
 
         private IEnumerable<Claim> GetClaims(ApplicationUser user, List<string> roles)
         {
-            var authClaims = new List<Claim> 
+            var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName ?? throw new ArgumentNullException()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

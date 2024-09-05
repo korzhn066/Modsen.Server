@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Modsen.Server.Authentication.Infrastructure.Data.Seeds
 {
@@ -14,13 +9,13 @@ namespace Modsen.Server.Authentication.Infrastructure.Data.Seeds
         {
             builder.Entity<IdentityRole>()
                 .HasData(
-                    new IdentityRole()
+                    new()
                     {
                         Id = "1e445865-a24d-4543-a6c6-9443d048cdb9",
                         Name = "Client",
                         NormalizedName = "CLIENT",
                     },
-                    new IdentityRole()
+                    new()
                     {
                         Id = "2e445865-a24d-4543-a6c6-9443d048cdb9",
                         Name = "Admin",

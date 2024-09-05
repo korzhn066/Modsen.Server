@@ -1,6 +1,7 @@
-﻿using Modsen.Server.Authentication.Api.Middlewares;
+﻿using Microsoft.AspNetCore.Builder;
+using Modsen.Server.Shared.Middlewares;
 
-namespace Modsen.Server.Authentication.Api.MiddlewareExtensions
+namespace Modsen.Server.Shared.MiddlewareExtensions
 {
     public static class UseExceptionHandlerMiddlewareExtension
     {
