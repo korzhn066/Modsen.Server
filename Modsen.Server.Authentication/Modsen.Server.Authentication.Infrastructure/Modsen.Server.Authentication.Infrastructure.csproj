@@ -16,5 +16,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Modsen.Server.Authentication.Domain\Modsen.Server.Authentication.Domain.csproj" />
   </ItemGroup>
-
 </Project>

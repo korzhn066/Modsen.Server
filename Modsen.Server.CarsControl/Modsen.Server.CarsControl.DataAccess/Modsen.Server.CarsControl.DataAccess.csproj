@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Modsen.Server.Shared\Modsen.Server.Shared.csproj" />
+    <ProjectReference Include="..\..\Modsen.Server.Shared\Modsen.Server.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -31,7 +31,7 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddCar(string json)
         {
             await _rentCarService.AddCarAsync(json);
