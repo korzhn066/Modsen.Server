@@ -9,11 +9,11 @@ using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
 
 namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandlers
 {
-    public class UpdateCommentHandler(ICommentRepository commentRepository) : IRequestHandler<UpdateComment>
+    public class UpdateCommentHandler(ICommentRepository commentRepository) : IRequestHandler<UpdateComment, Domain.Entities.Comment>
     {
         private readonly ICommentRepository _commentRepository = commentRepository;
 
-        public async Task Handle(UpdateComment request, CancellationToken cancellationToken)
+        public async Task<Domain.Entities.Comment> Handle(UpdateComment request, CancellationToken cancellationToken)
         {
             var comment = await _commentRepository.Query
                 .GetQuery(new CommentIdSpecification(request.CommentId))
@@ -23,6 +23,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
             comment.Message = request.Message;
 
             await _commentRepository.SaveChangesAsync();
+
+            return comment;
         }
     }
 }
