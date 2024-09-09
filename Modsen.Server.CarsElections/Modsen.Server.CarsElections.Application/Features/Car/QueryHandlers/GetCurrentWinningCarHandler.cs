@@ -9,17 +9,29 @@ using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
 
 namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 {
-    public class GetCurrentWinningCarHandler(ICarRepository carRepository)
+    public class GetCurrentWinningCarHandler(
+        ICarRepository carRepository,
+        ICacheRepository cacheRepository)
         : IRequestHandler<GetCurrentWinningCar, Domain.Entities.Car>
     {
         private readonly ICarRepository _carRepository = carRepository;
+        private readonly ICacheRepository _cacheRepository = cacheRepository;
 
         public async Task<Domain.Entities.Car> Handle(GetCurrentWinningCar request, CancellationToken cancellationToken)
         {
-            return await _carRepository.Query
-                .GetQuery(new CarOrderByDescendingScoreSpecification())
-                .FirstOrDefaultAsync(cancellationToken)
-                ?? throw new NotFoundException(ErrorConstants.CarNotFoundError);
+            var currentWinningCar = await _cacheRepository.GetAsync<Domain.Entities.Car>("currentWinningCar");
+
+            if (currentWinningCar is null) 
+            {
+                currentWinningCar = await _carRepository.Query
+                    .GetQuery(new CarOrderByDescendingScoreSpecification())
+                    .FirstOrDefaultAsync(cancellationToken)
+                    ?? throw new NotFoundException(ErrorConstants.CarNotFoundError);
+
+                await _cacheRepository.SetAsync("currentWinningCar", currentWinningCar, 1000);
+            }
+
+            return currentWinningCar;
         }
     }
 }

@@ -9,19 +9,29 @@ using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
 
 namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 {
-    public class GetCarCommentsHandler(ICarRepository carRepository)
+    public class GetCarCommentsHandler(
+        ICarRepository carRepository,
+        ICacheRepository cacheRepository)
         : IRequestHandler<GetCarComments, Domain.Entities.Car>
     {
         private readonly ICarRepository _carRepository = carRepository;
+        private readonly ICacheRepository _cacheRepository = cacheRepository;
 
         public async Task<Domain.Entities.Car> Handle(GetCarComments request, CancellationToken cancellationToken)
         {
-            var car = await _carRepository.Query
-                .GetQuery(new IncludeCarCommentsSpecification(request.Page, request.Count))
-                .GetQuery(new CarIdSpecification(request.CarId))
-                .FirstOrDefaultAsync(cancellationToken);
+            var carComments = await _cacheRepository.GetAsync<Domain.Entities.Car>("carComments");
 
-            return car ?? throw new NotFoundException(ErrorConstants.CarNotFoundError);
+            if (carComments is null)
+            {
+                carComments = await _carRepository.Query
+                    .GetQuery(new IncludeCarCommentsSpecification(request.Page, request.Count))
+                    .GetQuery(new CarIdSpecification(request.CarId))
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                await _cacheRepository.SetAsync("carComments", carComments, 1000);
+            }
+
+            return carComments ?? throw new NotFoundException(ErrorConstants.CarNotFoundError);
         }
     }
 }

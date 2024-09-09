@@ -9,13 +9,23 @@ using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
 
 namespace Modsen.Server.CarsElections.Application.Features.Comment.QueryHandlers
 {
-    public class GetCommentByUserNameHandler(ILikeRepository likeRepository)
+    public class GetCommentByUserNameHandler(
+        ILikeRepository likeRepository,
+        ICacheRepository cacheRepository)
         : IRequestHandler<GetCommentByUserName, Domain.Entities.Comment>
     {
         private readonly ILikeRepository _likeRepository = likeRepository;
-        
+        private readonly ICacheRepository _cacheRepository = cacheRepository;
+
         public async Task<Domain.Entities.Comment> Handle(GetCommentByUserName request, CancellationToken cancellationToken)
         {
+            var comment = await _cacheRepository.GetAsync<Domain.Entities.Comment>(request.UserName + request.CarId);
+
+            if (comment is not null)
+            {
+                return comment;
+            }
+
             var like = await _likeRepository.Query
                 .GetQuery(new IncludeLikeCommentSpecification())
                 .GetQuery(new LikeCarIdSpecification(request.CarId))
