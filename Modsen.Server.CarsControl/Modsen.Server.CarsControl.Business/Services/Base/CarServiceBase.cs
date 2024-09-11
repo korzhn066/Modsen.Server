@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.Extensions.Logging;
 using Modsen.Server.CarsControl.Business.Interfaces.Base;
 using Modsen.Server.CarsControl.DataAccess.Entities;
 using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
@@ -11,14 +11,18 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 {
     public abstract class CarServiceBase(
         IMongoRepository mongoRepository,
-        IGrpcService grpcService) : ICarServiceBase
+        IGrpcService grpcService,
+        ILogger<CarServiceBase> logger) : ICarServiceBase
     {
         protected readonly IMongoRepository MongoRepository = mongoRepository;
         private readonly IGrpcService _grpcService = grpcService;
+        private readonly ILogger<CarServiceBase> _logger = logger;
 
         public async Task AddCarAsync(string car)
         {
             var id = await MongoRepository.AddAsync(new CarDocument { Content = BsonDocument.Parse(car) });
+
+            _logger.LogInformation("Add car");
 
             await _grpcService.AddCarAsync(id);
         }
@@ -29,14 +33,20 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 
             if (result.DeletedCount < 1)
             {
+                _logger.LogError("Error when deleting car");
+
                 throw new NotFoundException(ErrorConstants.NotFoundEntityError);
             }
+
+            _logger.LogInformation("Car deleted");
         }
 
         public async Task<string> GetCarAsync(string carId, CancellationToken cancellationTokend)
         {
             var car = await MongoRepository.GetByIdAsync(carId, cancellationTokend);
-        
+
+            _logger.LogInformation("Get car");
+
             return car.ToJson();
         }
 
@@ -44,6 +54,8 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
         {
             var cars = await MongoRepository
                 .GetAllAsync(page, count, cancellationToken);
+
+            _logger.LogInformation("Get cars");
 
             return cars.ToJson();
         }
@@ -54,8 +66,12 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 
             if (!result.IsAcknowledged)
             {
+                _logger.LogError("Error when updating car");
+
                 throw new NotFoundException(ErrorConstants.NotFoundEntityError);
             }
+
+            _logger.LogInformation("Update car");
         }
     }
 }
