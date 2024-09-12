@@ -28,7 +28,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
         }
 
         [HttpPut]
-        [Route("/admin-role")]
+        [Route("admin-role")]
         public async Task<IActionResult> AddAdminRole(string userId)
         {
             await _mediator.Send(new AddApplicationUserToRoleById
@@ -41,7 +41,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
         }
 
         [HttpPut]
-        [Route("/status")]
+        [Route("status")]
         public async Task<IActionResult> ChangeUserStatus(string userId, UserStatus userStatus)
         {
             await _mediator.Send(new ChangeApplicationUserStatus
