@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Modsen.Server.CarsControl.Business.Interfaces.Base;
@@ -14,10 +15,12 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
     public abstract class CarServiceBase(
         IMongoRepository mongoRepository,
         IGrpcService grpcService,
+        ILogger<CarServiceBase> logger,
         IWebHostEnvironment webHostEnvironment) : ICarServiceBase
     {
         protected readonly IMongoRepository MongoRepository = mongoRepository;
         private readonly IGrpcService _grpcService = grpcService;
+        private readonly ILogger<CarServiceBase> _logger = logger;
         private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
 
         public async Task DeleteCarAsync(string carId)
@@ -26,14 +29,20 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 
             if (result.DeletedCount < 1)
             {
+                _logger.LogError("Error when deleting car");
+
                 throw new NotFoundException(ErrorConstants.NotFoundEntityError);
             }
+
+            _logger.LogInformation("Car deleted");
         }
 
         public async Task<string> GetCarAsync(string carId, CancellationToken cancellationTokend)
         {
             var car = await MongoRepository.GetByIdAsync(carId, cancellationTokend);
 
+            _logger.LogInformation("Get car");
+            
             return car.ToJson();
         }
 
@@ -41,6 +50,8 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
         {
             var cars = await MongoRepository
                 .GetAllAsync(page, count, cancellationToken);
+
+            _logger.LogInformation("Get cars");
 
             return cars.ToJson();
         }
@@ -51,8 +62,12 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 
             if (!result.IsAcknowledged)
             {
+                _logger.LogError("Error when updating car");
+
                 throw new NotFoundException(ErrorConstants.NotFoundEntityError);
             }
+
+            _logger.LogInformation("Update car");
         }
 
         public async Task AddCarAsync(string car, IFormFileCollection formFiles)
@@ -71,8 +86,10 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
                 Content = BsonDocument.Parse(car),
                 Photos = photos
             });
-
-           await _grpcService.AddCarAsync(id);
+            
+            _logger.LogInformation("Add car");
+            
+            await _grpcService.AddCarAsync(id);
         }
 
         private string UploadFile(IFormFile file)

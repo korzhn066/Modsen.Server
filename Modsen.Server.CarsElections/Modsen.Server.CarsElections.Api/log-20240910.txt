@@ -1,0 +1,21 @@
+2024-09-10 19:42:59.431 +03:00 [INF] Configured endpoint UserConsumerGroup, Consumer: Modsen.Server.CarsElections.Application.Services.UserCreatedConsumer
+2024-09-10 19:42:59.513 +03:00 [INF] User profile is available. Using 'C:\Users\User\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-09-10 19:42:59.775 +03:00 [INF] Now listening on: https://localhost:7018
+2024-09-10 19:42:59.775 +03:00 [INF] Now listening on: http://localhost:5048
+2024-09-10 19:42:59.775 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-09-10 19:42:59.775 +03:00 [INF] Hosting environment: Development
+2024-09-10 19:42:59.775 +03:00 [INF] Content root path: C:\Users\User\source\repos\Modsen.Server\Modsen.Server.CarsElections\Modsen.Server.CarsElections.Api
+2024-09-10 19:43:00.489 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7018/swagger/index.html - null null
+2024-09-10 19:43:00.693 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7018/swagger/index.html - 200 null text/html;charset=utf-8 207.8617ms
+2024-09-10 19:43:00.863 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7018/_vs/browserLink - null null
+2024-09-10 19:43:00.863 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7018/_framework/aspnetcore-browser-refresh.js - null null
+2024-09-10 19:43:00.868 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7018/_framework/aspnetcore-browser-refresh.js - 200 13798 application/javascript; charset=utf-8 5.4411ms
+2024-09-10 19:43:00.904 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7018/_vs/browserLink - 200 null text/javascript; charset=UTF-8 41.3693ms
+2024-09-10 19:43:00.918 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7018/swagger/index.html - null null
+2024-09-10 19:43:00.926 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7018/swagger/index.html - 200 null text/html;charset=utf-8 8.2782ms
+2024-09-10 19:43:00.969 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7018/swagger/v1/swagger.json - null null
+2024-09-10 19:43:01.067 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7018/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 98.9714ms
+2024-09-10 19:43:01.673 +03:00 [WRN] Consumer [] error ("Local_Transport"): localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Unknown error (after 2010ms in state CONNECT) on User. IsFatal(false)
+2024-09-10 19:43:10.413 +03:00 [WRN] Consumer [] error ("Local_Transport"): localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Unknown error (after 2003ms in state CONNECT) on User. IsFatal(false)
+2024-09-10 19:43:21.803 +03:00 [WRN] Consumer [] error ("Local_Transport"): localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Unknown error (after 2002ms in state CONNECT) on User. IsFatal(false)
+2024-09-10 19:43:39.013 +03:00 [WRN] Consumer [] error ("Local_Transport"): localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Unknown error (after 2003ms in state CONNECT) on User. IsFatal(false)
