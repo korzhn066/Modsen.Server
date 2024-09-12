@@ -86,7 +86,7 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
                 Content = BsonDocument.Parse(car),
                 Photos = photos
             });
-            
+          
             _logger.LogInformation("Add car");
             
             await _grpcService.AddCarAsync(id);

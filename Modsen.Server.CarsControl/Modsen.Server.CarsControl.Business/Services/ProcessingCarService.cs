@@ -12,12 +12,12 @@ namespace Modsen.Server.CarsControl.Business.Services
     internal class ProcessingCarService(
         IMongoRepositoryFactory mongoRepositoryFactory,
         IGrpcService grpcService,
-        IWebHostEnvironment webHostEnvironment
+        IWebHostEnvironment webHostEnvironment,
         ILogger<CarServiceBase> logger) : CarServiceBase(
             mongoRepositoryFactory.Create(nameof(CarType.Processing)), 
             grpcService,
-            webHostEnvironment,
-            logger), IProcessingCarService
+            logger,
+            webHostEnvironment), IProcessingCarService
     {
     }
 }

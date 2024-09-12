@@ -15,8 +15,8 @@ namespace Modsen.Server.CarsControl.Business.Services
         IWebHostEnvironment webHostEnvironment) : CarServiceBase(
             mongoRepositoryFactory.Create(nameof(CarType.Elections)), 
             grpcService,
-            webHostEnvironment,
-            logger), IElectionsCarService
+            logger,
+            webHostEnvironment), IElectionsCarService
     {
     }
 }

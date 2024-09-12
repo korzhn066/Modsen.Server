@@ -9,14 +9,14 @@ using Modsen.Server.CarsControl.DataAccess.Interfaces.Services;
 namespace Modsen.Server.CarsControl.Business.Services
 {
     public class RentCarService(
-        IMongoRepositoryFactory mongoRepositoryFactory, 
+        IMongoRepositoryFactory mongoRepositoryFactory,
         IGrpcService grpcService,
         ILogger<CarServiceBase> logger,
         IWebHostEnvironment webHostEnvironment) : CarServiceBase(
             mongoRepositoryFactory.Create(nameof(CarType.Rent)),
             grpcService,
-            webHostEnvironment,
-            logger), IRentCarService
+            logger,
+            webHostEnvironment), IRentCarService
     {
     }
 }
