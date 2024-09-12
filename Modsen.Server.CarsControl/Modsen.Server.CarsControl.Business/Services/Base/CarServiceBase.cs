@@ -72,7 +72,7 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
                 Photos = photos
             });
 
-            await _grpcService.AddCarAsync(id);
+           await _grpcService.AddCarAsync(id);
         }
 
         private string UploadFile(IFormFile file)
