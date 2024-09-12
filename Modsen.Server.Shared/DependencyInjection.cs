@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Modsen.Server.Shared.Models;
+using Serilog;
+using Serilog.Sinks.Http.BatchFormatters;
 using System.Text;
 
 namespace Modsen.Server.Shared
@@ -37,6 +40,19 @@ namespace Modsen.Server.Shared
                 });
 
             return services;
+        }
+
+        public static IHostBuilder ConfigureLogger(this IHostBuilder host, string logstashUri)
+        {
+            host.UseSerilog((_, configuration) => configuration
+                .Enrich.FromLogContext()
+                .WriteTo.DurableHttpUsingFileSizeRolledBuffers(
+                    requestUri: logstashUri,
+                    textFormatter: new Serilog.Formatting.Elasticsearch.ElasticsearchJsonFormatter(),
+                    batchFormatter: new ArrayBatchFormatter())
+            );
+
+            return host;
         }
     }
 }
