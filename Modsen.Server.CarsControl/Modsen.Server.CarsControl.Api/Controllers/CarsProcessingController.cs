@@ -4,7 +4,7 @@ using Modsen.Server.CarsControl.Business.Interfaces;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
-    [Route("api/processing-cars/")]
+    [Route("api/cars/processing/")]
     [ApiController]
     [Authorize(Roles = "Admin")]
     public class CarsProcessingController(IProcessingCarService processingCarService) : ControllerBase

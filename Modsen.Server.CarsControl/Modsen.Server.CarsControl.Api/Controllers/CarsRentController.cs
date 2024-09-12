@@ -4,7 +4,7 @@ using Modsen.Server.CarsControl.Business.Interfaces;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
-    [Route("api/rent-cars/")]
+    [Route("api/cars/rent/")]
     [ApiController]
     public class CarsRentController(IRentCarService rentCarService) : ControllerBase
     {
