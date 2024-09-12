@@ -1,4 +1,5 @@
-﻿using Modsen.Server.CarsControl.Business.Interfaces;
+﻿using Microsoft.AspNetCore.Hosting;
+using Modsen.Server.CarsControl.Business.Interfaces;
 using Modsen.Server.CarsControl.Business.Services.Base;
 using Modsen.Server.CarsControl.DataAccess.Enums;
 using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
@@ -9,8 +10,11 @@ namespace Modsen.Server.CarsControl.Business.Services
 {
     internal class ProcessingCarService(
         IMongoRepositoryFactory mongoRepositoryFactory,
-        IGrpcService grpcService) : CarServiceBase(
-            mongoRepositoryFactory.Create(nameof(CarType.Processing)), grpcService), IProcessingCarService
+        IGrpcService grpcService,
+        IWebHostEnvironment webHostEnvironment) : CarServiceBase(
+            mongoRepositoryFactory.Create(nameof(CarType.Processing)), 
+            grpcService,
+            webHostEnvironment), IProcessingCarService
     {
     }
 }
