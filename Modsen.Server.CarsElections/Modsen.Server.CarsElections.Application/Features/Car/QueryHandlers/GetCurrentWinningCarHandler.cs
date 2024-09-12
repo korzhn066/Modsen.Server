@@ -12,19 +12,30 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 {
     public class GetCurrentWinningCarHandler(
         ICarRepository carRepository,
+        ICacheRepository cacheRepository,
         ILogger<GetCurrentWinningCarHandler> logger)
         : IRequestHandler<GetCurrentWinningCar, Domain.Entities.Car>
     {
         private readonly ICarRepository _carRepository = carRepository;
+        private readonly ICacheRepository _cacheRepository = cacheRepository;
         private readonly ILogger<GetCurrentWinningCarHandler> _logger = logger;
 
         public async Task<Domain.Entities.Car> Handle(GetCurrentWinningCar request, CancellationToken cancellationToken)
         {
-            var car = await _carRepository.Query
+            var currentWinningCar = await _cacheRepository.GetAsync<Domain.Entities.Car>("currentWinningCar");
+            
+            if (currentWinningCar is not null) 
+            {
+                _logger.LogInformation("Get winning car");
+            
+                return currentWinningCar;
+            }
+        
+            var currentWinningCar = await _carRepository.Query
                 .GetQuery(new CarOrderByDescendingScoreSpecification())
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (car is null)
+            if (currentWinningCar is null)
             {
                 _logger.LogError("Winning car not found");
 
@@ -33,7 +44,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 
             _logger.LogInformation("Get winning car");
 
-            return car;
+            return currentWinningCar;
         }
     }
 }

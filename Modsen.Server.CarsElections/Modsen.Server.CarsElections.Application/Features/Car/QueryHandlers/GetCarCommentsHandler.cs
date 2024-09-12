@@ -12,29 +12,42 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 {
     public class GetCarCommentsHandler(
         ICarRepository carRepository,
-        ILogger<GetCarComments> logger)
+         ILogger<GetCarComments> logger,
+        ICacheRepository cacheRepository)
         : IRequestHandler<GetCarComments, Domain.Entities.Car>
     {
         private readonly ICarRepository _carRepository = carRepository;
+        private readonly ICacheRepository _cacheRepository = cacheRepository;
         private readonly ILogger<GetCarComments> _logger = logger;
 
         public async Task<Domain.Entities.Car> Handle(GetCarComments request, CancellationToken cancellationToken)
         {
-            var car = await _carRepository.Query
-                .GetQuery(new IncludeCarCommentsSpecification(request.Page, request.Count))
-                .GetQuery(new CarIdSpecification(request.CarId))
-                .FirstOrDefaultAsync(cancellationToken);
+            var carComments = await _cacheRepository.GetAsync<Domain.Entities.Car>("carComments");
 
-            if (car is null)
+            if (carComments is not null)
+            {
+                _logger.LogInformation("Get comments");
+
+                return carComments;
+            }
+            
+            carComments = await _carRepository.Query
+                    .GetQuery(new IncludeCarCommentsSpecification(request.Page, request.Count))
+                    .GetQuery(new CarIdSpecification(request.CarId))
+                    .FirstOrDefaultAsync(cancellationToken);
+
+            if (carComments is null)
             {
                 _logger.LogError("Car is null when getting comments");
 
                 throw new NotFoundException(ErrorConstants.CarNotFoundError);
             }
+            
+            await _cacheRepository.SetAsync("carComments", carComments, 1000);            
 
             _logger.LogInformation("Get comments");
 
-            return car;
+            return carComments;
         }
     }
 }

@@ -16,11 +16,13 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
     public class AddCommentHandler(
         ILikeRepository likeRepository,
         IUserRepository userRepository,
-        IMapper mapper,
-        ILogger<AddCommentHandler> logger) : IRequestHandler<AddComment>
+        ILogger<AddCommentHandler> logger
+        ICacheRepository cacheRepository,
+        IMapper mapper) : IRequestHandler<AddComment>
     {
         private readonly ILikeRepository _likeRepository = likeRepository;
         private readonly IUserRepository _userRepository = userRepository;
+        private readonly ICacheRepository _cacheRepository = cacheRepository;
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<AddCommentHandler> _logger = logger;
 
@@ -47,6 +49,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
                 User = user,
                 Type = LikeType.Owner,
             }, cancellationToken);
+
+            await _cacheRepository.SetAsync(request.UserName + request.CarId, comment);
 
             await _likeRepository.SaveChangesAsync();
 

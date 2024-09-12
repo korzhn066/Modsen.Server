@@ -17,10 +17,16 @@ namespace Modsen.Server.CarsElections.Infrastructure
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddStackExchangeRedisCache(options => {
+                options.Configuration = builder.Configuration["Redis:Host"];
+                options.InstanceName = builder.Configuration["Redis:InstanceName"];
+            });
+
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILikeRepository, LikeRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICacheRepository, CacheRepository>();
 
             return services;
         }
