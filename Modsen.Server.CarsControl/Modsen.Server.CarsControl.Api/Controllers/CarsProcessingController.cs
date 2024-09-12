@@ -4,7 +4,7 @@ using Modsen.Server.CarsControl.Business.Interfaces;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
-    [Route("api/processing-cars/")]
+    [Route("api/cars/processing/")]
     [ApiController]
     [Authorize(Roles = "Admin")]
     public class CarsProcessingController(IProcessingCarService processingCarService) : ControllerBase
@@ -30,9 +30,9 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCar(string json)
+        public async Task<IActionResult> AddCar(string json, IFormFileCollection formFiles)
         {
-            await _processingCarService.AddCarAsync(json);
+            await _processingCarService.AddCarAsync(json, formFiles);
 
             return NoContent();
         }

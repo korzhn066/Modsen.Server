@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
 using Modsen.Server.CarsControl.Business.Interfaces;
 using Modsen.Server.CarsControl.Business.Services.Base;
 using Modsen.Server.CarsControl.DataAccess.Enums;
@@ -10,10 +11,11 @@ namespace Modsen.Server.CarsControl.Business.Services
     public class RentCarService(
         IMongoRepositoryFactory mongoRepositoryFactory, 
         IGrpcService grpcService,
-        ILogger<CarServiceBase> logger)
-        : CarServiceBase(
-            mongoRepositoryFactory.Create(nameof(CarType.Rent)), 
+        ILogger<CarServiceBase> logger,
+        IWebHostEnvironment webHostEnvironment) : CarServiceBase(
+            mongoRepositoryFactory.Create(nameof(CarType.Rent)),
             grpcService,
+            webHostEnvironment,
             logger), IRentCarService
     {
     }

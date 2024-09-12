@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Http;
+using MongoDB.Bson;
 
 namespace Modsen.Server.CarsControl.Business.Interfaces.Base
 {
@@ -10,7 +11,7 @@ namespace Modsen.Server.CarsControl.Business.Interfaces.Base
         
         Task UpdateCarAsync(string carId, string car);
         
-        Task AddCarAsync(string car);
+        Task AddCarAsync(string car, IFormFileCollection formFiles);
         
         Task DeleteCarAsync(string carId);
     }

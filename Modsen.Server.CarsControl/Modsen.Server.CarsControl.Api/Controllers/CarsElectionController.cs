@@ -4,7 +4,7 @@ using Modsen.Server.CarsControl.Business.Interfaces;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
-    [Route("api/election-cars/")]
+    [Route("api/cars/election/")]
     [ApiController]
     public class CarsElectionController(IElectionsCarService electionsCarService) : ControllerBase
     {
@@ -32,9 +32,9 @@ namespace Modsen.Server.CarsControl.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddCar(string json)
+        public async Task<IActionResult> AddCar(string json, IFormFileCollection formFiles)
         {
-            await _electionsCarService.AddCarAsync(json);
+            await _electionsCarService.AddCarAsync(json, formFiles);
 
             return NoContent();
         }
