@@ -16,7 +16,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
     public class AddCommentHandler(
         ILikeRepository likeRepository,
         IUserRepository userRepository,
-        ILogger<AddCommentHandler> logger
+        ILogger<AddCommentHandler> logger,
         ICacheRepository cacheRepository,
         IMapper mapper) : IRequestHandler<AddComment>
     {

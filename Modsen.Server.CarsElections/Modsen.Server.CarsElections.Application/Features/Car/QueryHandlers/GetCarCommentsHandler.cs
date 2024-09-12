@@ -43,7 +43,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
                 throw new NotFoundException(ErrorConstants.CarNotFoundError);
             }
             
-            await _cacheRepository.SetAsync("carComments", carComments, 1000);            
+            await _cacheRepository.SetAsync("carComments", carComments, 1000);          
 
             _logger.LogInformation("Get comments");
 

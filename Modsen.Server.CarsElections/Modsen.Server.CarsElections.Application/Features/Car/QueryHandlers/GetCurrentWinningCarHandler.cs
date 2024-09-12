@@ -24,14 +24,14 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
         {
             var currentWinningCar = await _cacheRepository.GetAsync<Domain.Entities.Car>("currentWinningCar");
             
-            if (currentWinningCar is not null) 
+            if (currentWinningCar is not null)
             {
                 _logger.LogInformation("Get winning car");
             
                 return currentWinningCar;
             }
         
-            var currentWinningCar = await _carRepository.Query
+            currentWinningCar = await _carRepository.Query
                 .GetQuery(new CarOrderByDescendingScoreSpecification())
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -41,6 +41,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 
                 throw new NotFoundException(ErrorConstants.CarNotFoundError);
             }
+
+            await _cacheRepository.SetAsync("currentWinningCar", currentWinningCar, 1000);
 
             _logger.LogInformation("Get winning car");
 
