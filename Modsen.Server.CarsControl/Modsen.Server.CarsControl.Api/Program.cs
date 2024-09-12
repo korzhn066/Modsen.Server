@@ -30,6 +30,7 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -32,9 +32,9 @@ namespace Modsen.Server.CarsControl.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddCar(string json)
+        public async Task<IActionResult> AddCar(string json, IFormFileCollection formFiles)
         {
-            await _electionsCarService.AddCarAsync(json);
+            await _electionsCarService.AddCarAsync(json, formFiles);
 
             return NoContent();
         }

@@ -31,10 +31,10 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddCar(string json)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddCar(string json, IFormFileCollection formFiles)
         {
-            await _rentCarService.AddCarAsync(json);
+            await _rentCarService.AddCarAsync(json, formFiles);
 
             return NoContent();
         }
