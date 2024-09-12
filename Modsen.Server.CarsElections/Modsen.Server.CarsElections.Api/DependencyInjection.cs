@@ -1,4 +1,6 @@
-﻿using Modsen.Server.CarsElections.Api.Mapper;
+﻿using Microsoft.AspNetCore.SignalR;
+using Modsen.Server.CarsElections.Api.Hubs;
+using Modsen.Server.CarsElections.Api.Mapper;
 using System.Text.Json.Serialization;
 
 namespace Modsen.Server.CarsElections.Api
@@ -7,10 +9,7 @@ namespace Modsen.Server.CarsElections.Api
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services)
         {
-            services.AddGrpc(options =>
-            {
-                options.EnableDetailedErrors = true;
-            });
+            services.AddGrpc();
 
             services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -19,6 +18,9 @@ namespace Modsen.Server.CarsElections.Api
             services.AddSwaggerGen();
 
             services.AddAutoMapper(typeof(CommentMappingProfile), typeof(LikeMappingProfile));
+
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
             return services;
         }

@@ -5,6 +5,7 @@ using Modsen.Server.CarsElections.Infrastructure;
 using Modsen.Server.Shared.MiddlewareExtensions;
 using Modsen.Server.Shared;
 using Modsen.Server.Shared.Models;
+using Modsen.Server.CarsElections.Api.Hubs;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,5 +44,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<CommentHub>("/commentHub");
 
 app.Run();

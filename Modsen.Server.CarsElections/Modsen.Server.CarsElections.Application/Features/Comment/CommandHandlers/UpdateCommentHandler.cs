@@ -12,12 +12,12 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
 {
     public class UpdateCommentHandler(
         ICommentRepository commentRepository,
-        ILogger<UpdateCommentHandler> logger) : IRequestHandler<UpdateComment>
+        ILogger<UpdateCommentHandler> logger) : IRequestHandler<UpdateComment, Domain.Entities.Comment>
     {
         private readonly ICommentRepository _commentRepository = commentRepository;
         private readonly ILogger<UpdateCommentHandler> _logger = logger;
 
-        public async Task Handle(UpdateComment request, CancellationToken cancellationToken)
+        public async Task<Domain.Entities.Comment> Handle(UpdateComment request, CancellationToken cancellationToken)
         {
             var comment = await _commentRepository.Query
                 .GetQuery(new CommentIdSpecification(request.CommentId))
@@ -35,6 +35,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
             await _commentRepository.SaveChangesAsync();
 
             _logger.LogInformation("Update comment");
+            
+            return comment;
         }
     }
 }
