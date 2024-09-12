@@ -9,17 +9,20 @@ using Modsen.Server.Shared.Constants;
 using Modsen.Server.CarsElections.Domain.Enums;
 using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandlers
 {
     public class AddCommentHandler(
         ILikeRepository likeRepository,
         IUserRepository userRepository,
-        IMapper mapper) : IRequestHandler<AddComment>
+        IMapper mapper,
+        ILogger<AddCommentHandler> logger) : IRequestHandler<AddComment>
     {
         private readonly ILikeRepository _likeRepository = likeRepository;
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly ILogger<AddCommentHandler> _logger = logger;
 
         public async Task Handle(AddComment request, CancellationToken cancellationToken)
         {
@@ -29,7 +32,14 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
 
             var user = await _userRepository.Query
                 .GetQuery(new GetUserByUserNameSpecification(request.UserName))
-                .FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (user is null)
+            {
+                _logger.LogError("User is null when trying to add comment");
+
+                throw new NotFoundException(ErrorConstants.NotFoundUserError);
+            }
          
             await _likeRepository.AddAsync(new Domain.Entities.Like
             {
@@ -39,6 +49,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
             }, cancellationToken);
 
             await _likeRepository.SaveChangesAsync();
+
+            _logger.LogInformation("Add comment");
         }
 
         private async Task CheckIsCommentExist(string carId, string userName, CancellationToken cancellationToken)
@@ -51,6 +63,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
 
             if (like is not null)
             {
+                _logger.LogError("User already has a comment");
+
                 throw new BadRequestException(ErrorConstants.CommentAlreadyExistsError);
             }
         }

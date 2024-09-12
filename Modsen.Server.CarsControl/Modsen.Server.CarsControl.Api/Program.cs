@@ -7,6 +7,9 @@ using Modsen.Server.Shared.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host
+    .ConfigureLogger(builder.Configuration["ELK:LogstashUri"]!);
+
 builder.Services
     .AddPresintation()
     .AddDataAccess(builder)
@@ -30,6 +33,7 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

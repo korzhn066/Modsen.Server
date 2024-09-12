@@ -6,8 +6,12 @@ using Modsen.Server.Shared.MiddlewareExtensions;
 using Modsen.Server.Shared;
 using Modsen.Server.Shared.Models;
 using Modsen.Server.CarsElections.Api.Hubs;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host
+    .ConfigureLogger(builder.Configuration["ELK:LogstashUri"]!);
 
 builder.Services
     .AddPresentation()
@@ -35,6 +39,7 @@ app.UseHttpsRedirection();
 
 app.MapGrpcService<CarService>();
 
+app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 

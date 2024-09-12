@@ -10,6 +10,7 @@ using Modsen.Server.Authentication.Domain.Enums;
 using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
 using Modsen.Server.Shared.Models.Kafka;
+using Microsoft.Extensions.Logging;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers
 {
@@ -17,13 +18,15 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
         UserManager<Domain.Entities.ApplicationUser> userManager,
         ITokenProviderService tokenProviderService,
         ITopicProducer<UserCreated> topicProducer,
+        ILogger<RegisterApplicationUserHandler> logger,
         IMapper mapper)
         : IRequestHandler<RegisterApplicationUser, TokenModel>
     {
         private readonly UserManager<Domain.Entities.ApplicationUser> _userManager = userManager;
         private readonly ITokenProviderService _tokenProviderService = tokenProviderService;
         private readonly ITopicProducer<UserCreated> _topicProducer = topicProducer;
-        private readonly IMapper _mapper = mapper;   
+        private readonly IMapper _mapper = mapper;
+        private readonly ILogger<RegisterApplicationUserHandler> _logger = logger;
 
         public async Task<TokenModel> Handle(RegisterApplicationUser request, CancellationToken cancellationToken)
         {
@@ -43,6 +46,8 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
 
             if (!result.Succeeded)
             {
+                _logger.LogError("Create user error");
+
                 throw new BadRequestException(string.Join(' ', result.Errors.Select(error => error.Code)));
             }
 
@@ -50,12 +55,16 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
 
             if (!result.Succeeded)
             {
+                _logger.LogError("Create db update error");
+
                 throw new DbUpdateException(ErrorConstants.ServerSideError);
             }
 
             await _topicProducer.Produce(
                 _mapper.Map<UserCreated>(user),
                 cancellationToken);
+
+            _logger.LogInformation("User register");
 
             return new TokenModel
             {

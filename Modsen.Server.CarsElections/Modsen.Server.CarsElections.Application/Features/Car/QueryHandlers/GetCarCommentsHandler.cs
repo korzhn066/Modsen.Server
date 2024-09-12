@@ -6,13 +6,17 @@ using Modsen.Server.CarsElections.Application.Specifications.CarSpecificaions;
 using Modsen.Server.Shared.Constants;
 using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 {
-    public class GetCarCommentsHandler(ICarRepository carRepository)
+    public class GetCarCommentsHandler(
+        ICarRepository carRepository,
+        ILogger<GetCarComments> logger)
         : IRequestHandler<GetCarComments, Domain.Entities.Car>
     {
         private readonly ICarRepository _carRepository = carRepository;
+        private readonly ILogger<GetCarComments> _logger = logger;
 
         public async Task<Domain.Entities.Car> Handle(GetCarComments request, CancellationToken cancellationToken)
         {
@@ -21,7 +25,16 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
                 .GetQuery(new CarIdSpecification(request.CarId))
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return car ?? throw new NotFoundException(ErrorConstants.CarNotFoundError);
+            if (car is null)
+            {
+                _logger.LogError("Car is null when getting comments");
+
+                throw new NotFoundException(ErrorConstants.CarNotFoundError);
+            }
+
+            _logger.LogInformation("Get comments");
+
+            return car;
         }
     }
 }
