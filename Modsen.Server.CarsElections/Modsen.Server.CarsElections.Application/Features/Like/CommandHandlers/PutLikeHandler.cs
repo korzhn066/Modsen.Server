@@ -9,29 +9,44 @@ using Modsen.Server.Shared.Constants;
 using Modsen.Server.CarsElections.Domain.Enums;
 using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace Modsen.Server.CarsElections.Application.Features.Like.CommandHandlers
 {
     public class PutLikeHandler(
         ILikeRepository likeRepository,
         ICommentRepository commentRepository,
-        IUserRepository userRepository) : IRequestHandler<PutLike>
+        IUserRepository userRepository,
+        ILogger<PutLikeHandler> logger) : IRequestHandler<PutLike>
     {
         private readonly ILikeRepository _likeRepository = likeRepository;
         private readonly ICommentRepository _commentRepository = commentRepository;
         private readonly IUserRepository _userRepository = userRepository;
+        private ILogger<PutLikeHandler> _logger = logger;
 
         public async Task Handle(PutLike request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.Query
                 .GetQuery(new GetUserByUserNameSpecification(request.UserName))
-                .FirstOrDefaultAsync(cancellationToken)
-                ?? throw new NotFoundException(ErrorConstants.NotFoundUserError);
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (user is null)
+            {
+                _logger.LogError("User is null when trying to put like");
+
+                throw new NotFoundException(ErrorConstants.NotFoundUserError);
+            }
 
             var comment = await _commentRepository.Query
                 .GetQuery(new CommentIdSpecification(request.CommentId))
-                .FirstOrDefaultAsync(cancellationToken)
-                ?? throw new NotFoundException(ErrorConstants.CommentNotFoundError);
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (comment is null)
+            {
+                _logger.LogError("Comment is null when trying to put like");
+
+                throw new NotFoundException(ErrorConstants.CommentNotFoundError);
+            }
 
             var like = await _likeRepository.Query
                 .GetQuery(new LikeUsernameSpecification(request.UserName))
@@ -61,6 +76,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Like.CommandHandlers
             }
 
             await _likeRepository.SaveChangesAsync();
+
+            _logger.LogInformation("Put like");
         }
 
         private static Domain.Entities.Comment ChangeLikeCount(Domain.Entities.Comment comment, LikeType likeType)

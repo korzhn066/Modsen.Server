@@ -14,5 +14,6 @@
         public const string CommentNotFoundError = "CommentNotFound";
         public const string CommentAlreadyExistsError = "CommentAlreadyExists";
         public const string LikeAlreadyExistsError = "LikeAlreadyExists";
+        public const string FileLoadError = "FileLoad";
     }
 }
