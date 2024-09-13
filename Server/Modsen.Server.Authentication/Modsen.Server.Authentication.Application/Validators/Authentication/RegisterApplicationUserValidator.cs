@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Modsen.Server.Authentication.Application.Features.ApplicationUser.Commands;
-using Modsen.Server.Authentication.Application.Models.Authentication;
 
 namespace Modsen.Server.Authentication.Application.Validators.Authentication
 {
