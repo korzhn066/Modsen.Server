@@ -9,7 +9,8 @@ namespace Modsen.Server.CarsElections.Application.Mapper
         public CarMappingProfile()
         {
             CreateMap<AddCar, Car>()
-                .ForMember(destination => destination.Id, options => options.MapFrom(source => source.Id));
+                .ForMember(destination => destination.Id, options => options.MapFrom(source => source.Id))
+                .ForMember(destination => destination.CarType, options => options.MapFrom(source => source.CarType));
         }
     }
 }

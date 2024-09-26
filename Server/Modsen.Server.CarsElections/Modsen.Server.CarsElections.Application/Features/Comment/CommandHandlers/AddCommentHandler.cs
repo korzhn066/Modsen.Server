@@ -18,7 +18,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
         IUserRepository userRepository,
         ILogger<AddCommentHandler> logger,
         ICacheRepository cacheRepository,
-        IMapper mapper) : IRequestHandler<AddComment>
+        IMapper mapper) : IRequestHandler<AddComment, Domain.Entities.Comment>
     {
         private readonly ILikeRepository _likeRepository = likeRepository;
         private readonly IUserRepository _userRepository = userRepository;
@@ -26,7 +26,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<AddCommentHandler> _logger = logger;
 
-        public async Task Handle(AddComment request, CancellationToken cancellationToken)
+        public async Task<Domain.Entities.Comment> Handle(AddComment request, CancellationToken cancellationToken)
         {
             await CheckIsCommentExist(request.CarId, request.UserName, cancellationToken);
 
@@ -50,11 +50,13 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.CommandHandle
                 Type = LikeType.Owner,
             }, cancellationToken);
 
-            await _cacheRepository.SetAsync(request.UserName + request.CarId, comment);
+            await _cacheRepository.SetAsync(request.UserName + request.CarId, comment, 1000);
 
             await _likeRepository.SaveChangesAsync();
 
             _logger.LogInformation("Add comment");
+
+            return comment;
         }
 
         private async Task CheckIsCommentExist(string carId, string userName, CancellationToken cancellationToken)

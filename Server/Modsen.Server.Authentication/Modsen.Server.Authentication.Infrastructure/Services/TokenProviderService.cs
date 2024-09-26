@@ -43,7 +43,6 @@ namespace Modsen.Server.Authentication.Infrastructure.Services
         {
             var tokeOptions = new JwtSecurityToken(
                 issuer: _validIssuer,
-                audience: _validAudience,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(_accessTokenValidityInMinutes),
                 signingCredentials: new SigningCredentials(

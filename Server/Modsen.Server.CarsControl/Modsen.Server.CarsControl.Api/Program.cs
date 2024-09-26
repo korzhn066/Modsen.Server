@@ -30,6 +30,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(optins =>
+{
+    optins.WithOrigins("http://localhost:4200");
+    optins.AllowCredentials();
+    optins.AllowAnyHeader();
+    optins.AllowAnyMethod();
+});
+
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();

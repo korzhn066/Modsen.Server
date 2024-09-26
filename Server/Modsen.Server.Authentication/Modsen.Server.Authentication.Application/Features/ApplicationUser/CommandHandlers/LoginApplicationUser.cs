@@ -6,6 +6,7 @@ using Modsen.Server.Shared.Constants;
 using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.Authentication.Domain.Interfaces.Services;
 using Microsoft.Extensions.Logging;
+using Modsen.Server.Authentication.Domain.Enums;
 
 namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.CommandHandlers
 {
@@ -27,6 +28,11 @@ namespace Modsen.Server.Authentication.Application.Features.ApplicationUser.Comm
             {
                 _logger.LogError("Incorrect user name");
 
+                throw new BadRequestException(ErrorConstants.LoginError);
+            }
+
+            if (user.UserStatus == UserStatus.Ban)
+            {
                 throw new BadRequestException(ErrorConstants.LoginError);
             }
 
