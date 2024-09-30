@@ -1,0 +1,70 @@
+version: '3.4'
+
+services:
+  modsen.server.carscontrol.api:
+    container_name: cars-control
+    image: ${DOCKER_REGISTRY-}modsenservercarscontrolapi
+    ports:
+        - "5000:8080"
+    build:
+        context: .
+        dockerfile: Modsen.Server.CarsControl/Modsen.Server.CarsControl.Api/Dockerfile
+    depends_on:
+        - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:6-jammy
+    ports:
+        - '27017:27017'
+    volumes:
+        - mongodb-data:/data/db
+
+  modsen.server.authentication.api:
+    container_name: authentication
+    image: ${DOCKER_REGISTRY-}modsenserverauthenticationapi
+    ports:
+        - "5001:8080"
+    build:
+        context: .
+        dockerfile: Modsen.Server.Authentication/Modsen.Server.Authentication.Api/Dockerfile
+    depends_on:
+        - authentication_my_sql
+
+  authentication_my_sql:
+    container_name: authentication_my_sql
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password1*
+    ports:
+      - "1433:1433"
+
+  modsen.server.carselections.api:
+    container_name: cars-elections
+    image: ${DOCKER_REGISTRY-}modsenservercarselectionsapi
+    ports:
+        - "5002:8080"
+    build:
+        context: .
+        dockerfile: Modsen.Server.CarsElections/Modsen.Server.CarsElections.Api/Dockerfile
+    depends_on:
+        - redis
+
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    environment:
+        - REDIS_PASSWORD=${REDIS_PASSWORD}
+        - REDIS_USER=${REDIS_USER}
+        - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
+    ports:
+        - "6380:6379"
+    volumes:
+        - ./redisdata:/data
+
+volumes:
+  mongodb-data:
+    driver: local
+  datafiles:

@@ -9,7 +9,7 @@ namespace Modsen.Server.Authentication.Api.Controllers
 {
     [Route("api/users/")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //Authorize(Roles = "Admin")]
     public class UsersController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
