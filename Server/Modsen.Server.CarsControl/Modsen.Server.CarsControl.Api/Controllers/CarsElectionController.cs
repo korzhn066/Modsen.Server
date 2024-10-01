@@ -12,7 +12,7 @@ namespace Modsen.Server.CarsControl.Api.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCar(string id)
         {
             await _electionsCarService.DeleteCarAsync(id);
@@ -22,7 +22,7 @@ namespace Modsen.Server.CarsControl.Api.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCar(string id, string json)
         {
             await _electionsCarService.UpdateCarAsync(id, json);
@@ -31,7 +31,7 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddCar(string json, IFormFileCollection formFiles)
         {
             await _electionsCarService.AddCarAsync(json, formFiles);
