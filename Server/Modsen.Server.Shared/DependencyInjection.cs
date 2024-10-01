@@ -46,6 +46,7 @@ namespace Modsen.Server.Shared
         {
             host.UseSerilog((_, configuration) => configuration
                 .Enrich.FromLogContext()
+                .WriteTo.Console()
                 .WriteTo.DurableHttpUsingFileSizeRolledBuffers(
                     requestUri: logstashUri,
                     textFormatter: new Serilog.Formatting.Elasticsearch.ElasticsearchJsonFormatter(),

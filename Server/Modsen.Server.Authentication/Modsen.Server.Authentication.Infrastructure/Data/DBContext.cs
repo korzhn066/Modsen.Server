@@ -12,15 +12,14 @@ namespace Modsen.Server.Authentication.Infrastructure.Data
         public DBContext(DbContextOptions options): base(options) 
         {
             var dbCreater = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
-            if (dbCreater != null)
-            {
-                // Create Database 
+            
+            if (dbCreater is not null)
+            { 
                 if (!dbCreater.CanConnect())
                 {
                     dbCreater.Create();
                 }
 
-                // Create Tables
                 if (!dbCreater.HasTables())
                 {
                     dbCreater.CreateTables();
