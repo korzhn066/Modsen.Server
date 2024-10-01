@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="photo">
+    <nz-carousel class="carousel" nzAutoPlay="true" nzEffect="scrollx">
+        @for (photo of car!.photos; track photo) {
+          <div nz-carousel-content>
+            <div class="cover"></div>
+
+            <img 
+              class="image" 
+              src="https://localhost:7255/images/{{photo}}"
+            />
+          </div>
+        }
+    </nz-carousel>
+</div>
+
+<div class="description">
+  <div>
+    {{car?.description}}
+  </div>
+  
+  <nz-table [nzShowPagination]="false" #basicTable [nzData]="listOfData">
+    <tbody>
+      @for (parametr of car?.content.parametrs; track parametr) {
+        <tr>
+          <td style="width: 100%;">{{ parametr.name }}</td>
+          <td>{{ parametr.body }}</td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+    
+</div>

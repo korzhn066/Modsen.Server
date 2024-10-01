@@ -1,0 +1,77 @@
+<app-page-title title="Отредактировать"></app-page-title>
+
+@if (car) {
+    <div class="container">
+        <div class="photo">
+          <nz-carousel class="carousel" nzAutoPlay="true" nzEffect="scrollx">
+              @for (photo of car!.photos; track photo) {
+                <div nz-carousel-content>
+                  <div class="cover"></div>
+      
+                  <img 
+                    class="image" 
+                    src="https://localhost:7255/images/{{photo}}"
+                  />
+                </div>
+              }
+          </nz-carousel>
+      </div>
+      
+      
+      <div class="description">
+        <input 
+            class="input"
+            nz-input 
+            placeholder="{{car.name}}" 
+            [(ngModel)]="car.name"
+            type="text"/>
+    
+        <textarea 
+            class="input"
+            rows="3"
+            placeholder="{{car.description}}"
+            [(ngModel)]="car.description"
+            nz-input >
+        </textarea>
+
+        @for (parametr of car.content.parametrs; track parametr) {
+            <div class="main-input-container">
+              @if (car.content.parametrs[$index].name != '' && car.content.parametrs[$index].body){
+                <input 
+                    class="input"
+                    nz-input 
+                    placeholder="{{car.content.parametrs[$index].name}}" 
+                    [(ngModel)]="car.content.parametrs[$index].name"
+                    type="text"/>
+            
+                <input 
+                    class="input"
+                    nz-input 
+                    placeholder="{{car.content.parametrs[$index].body}}" 
+                    [(ngModel)]="car.content.parametrs[$index].body"
+                    type="text"/>
+              } @else {
+                <input 
+                    class="input"
+                    nz-input 
+                    placeholder="Введите имя параметра" 
+                    [(ngModel)]="car.content.parametrs[$index].name"
+                    type="text"/>
+            
+                <input 
+                    class="input"
+                    nz-input 
+                    placeholder="Введите тело параметра"
+                    [(ngModel)]="car.content.parametrs[$index].body"
+                    type="text"/>
+              }
+                
+            </div>
+        }
+
+        <button class="button" nz-button nzType="primary" (click)="addParametr()">Добавить параметр</button>
+
+        <button class="button" nz-button nzType="primary" (click)="updateCar()">Отредактировать</button>
+      </div> 
+    </div>           
+}

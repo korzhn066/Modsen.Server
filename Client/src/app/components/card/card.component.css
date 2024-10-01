@@ -1,0 +1,9 @@
+.titleTemplate{
+    display: flex;
+    flex-direction: column;
+}
+
+.title-referens{
+    color: #848484;
+    font-size: 13px;
+}

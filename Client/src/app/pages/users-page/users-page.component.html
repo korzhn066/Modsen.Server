@@ -1,0 +1,87 @@
+<app-page-title title="Пользователи"></app-page-title>
+
+<div class="container">
+    <nz-table [nzShowPagination]="false" #basicTable [nzData]="users">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Role</th>
+          <th>Username</th>
+          <th>PhoneNumber</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (data of basicTable.data; track data.id) {
+          <tr>
+            <td>{{ data.id }}</td>
+            <td>{{ data.role }}</td>
+            <td>{{ data.userName }}</td>
+            <td>{{ data.phoneNumber }}</td>
+            <td>
+              @if (data.userStatus === 1){
+                unban
+              } @else {
+                ban
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+</div>
+
+<app-page-title title="Действия"></app-page-title>
+
+<div class="container">
+  <input nz-input [(ngModel)]="userId" placeholder="Введите id" type="text" />
+
+  <div>
+    <button class="button" (click)="banUser()" nz-button nzType="primary">Забанить</button>
+    <button class="button" (click)="unbanUser()" nz-button nzType="primary">Разбабанить</button>
+    <button class="button" (click)="giveAdminRole()" nz-button nzType="primary">Дать роль админа</button>
+    <button class="button" (click)="denyAdminRole()" nz-button nzType="primary">Забрать роль админа</button>
+  </div>
+</div>
+
+<app-page-title title="Получить пользователя по username"></app-page-title>
+
+<div class="container">
+  <input nz-input placeholder="Введите username" type="text" [(ngModel)]="username" name="username"/>
+
+  <div>
+    <button (click)="getUserByUsername()" class="button" nz-button nzType="primary">Получить</button>
+  </div>
+
+  @if (user) {
+    <nz-table [nzShowPagination]="false" #basicTable [nzData]="[user]">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Role</th>
+          <th>Username</th>
+          <th>PhoneNumber</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (data of basicTable.data; track data) {
+          <tr>
+            <td>{{ data.id }}</td>
+            <td>{{ data.role }}</td>
+            <td>{{ data.userName }}</td>
+            <td>{{ data.phoneNumber }}</td>
+            <td>
+              @if (data.userStatus === 1){
+                unban
+              } @else {
+                ban
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  }
+  
+</div>

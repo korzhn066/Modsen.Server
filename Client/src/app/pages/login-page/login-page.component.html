@@ -1,0 +1,35 @@
+<div class="container">
+  <form nz-form class="login-form" (ngSubmit)="login()">
+    <h2>Вход</h2>
+  
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="user">
+          <input 
+            type="text" 
+            nz-input 
+            placeholder="Username"
+            name="username"
+            [(ngModel)]="username"
+            />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+      
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="lock">
+          <input 
+            type="password" 
+            nz-input 
+            placeholder="Password"
+            name="password"
+            [(ngModel)]="password"
+            />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+  
+    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Войти</button>
+  </form>
+</div>

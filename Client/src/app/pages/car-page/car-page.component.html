@@ -1,0 +1,55 @@
+<app-page-title title="{{car?.name}}"></app-page-title>
+
+@if (authService.isAdmin) {
+    <app-admin-edit-panel [carType]="carType"></app-admin-edit-panel>
+}
+
+
+@if (car !== undefined) {
+    <app-full-card [car]="car"></app-full-card>
+}
+
+@if (authService.isAuthenticated) {
+    <div class="comment-container">
+        @if (myComment) {
+            <nz-comment-content>
+                <nz-form-item>
+                  <textarea 
+                    placeholder="{{myComment.message}}" 
+                    [value]="myComment.message"
+                    [(ngModel)]="myComment.message"
+                    class="comment-text" nz-input rows="4"></textarea>
+                </nz-form-item>
+                <nz-form-item>
+                  <button nz-button (click)="updateComment()" nzType="primary">
+                    Изменить
+                  </button>
+
+                  <button style="margin-left: 5px;" nzDanger nz-button (click)="deleteComment(myComment.id)" nzType="primary">
+                    Удалить
+                  </button>
+                </nz-form-item>
+            </nz-comment-content>
+        } @else {
+            <nz-comment-content>
+                <nz-form-item>
+                  <textarea 
+                    placeholder="Напишиет ваш комментарий" 
+                    class="comment-text"
+                    nz-input rows="4"></textarea>
+                </nz-form-item>
+                <nz-form-item>
+                  <button nz-button (click)="addComment()" nzType="primary">
+                    Отправить
+                  </button>
+                </nz-form-item>
+            </nz-comment-content>
+        }
+        
+    </div>
+
+    @for (comment of comments; track comment.id)
+    {
+        {{comment.message}}
+    }
+}

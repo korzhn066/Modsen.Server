@@ -1,0 +1,43 @@
+<div class="container">
+    <button nz-button nzType="primary" routerLink="edit">
+        <span nz-icon nzType="edit" nzTheme="outline"></span>
+        Редактировать
+    </button>
+
+    @switch (carType) {
+        @case (enum.Rent) {
+            <button nz-button (click)="move(enum.Elections)" nzType="primary">
+                Переместить в выборы
+            </button>
+
+            <button nz-button (click)="move(enum.Processing)" nzType="primary">
+                Переместить в обработку
+            </button>
+        }
+
+        @case (enum.Elections) {
+            <button nz-button (click)="move(enum.Rent)" nzType="primary">
+                Переместить в аренду
+            </button>
+
+            <button nz-button (click)="move(enum.Processing)" nzType="primary">
+                Переместить в обработку
+            </button>
+        }
+
+        @case (enum.Processing) {
+            <button nz-button (click)="move(enum.Elections)" nzType="primary">
+                Переместить в выборы
+            </button>
+
+            <button nz-button (click)="move(enum.Rent)" nzType="primary">
+                Переместить в аренду
+            </button>
+        }
+    }
+
+    <button nz-button (click)="delete()" nzType="primary" nzDanger>
+        <span nz-icon nzType="delete" nzTheme="outline"></span>
+        Удалить
+    </button>
+</div>

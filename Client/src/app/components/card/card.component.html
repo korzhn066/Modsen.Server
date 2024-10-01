@@ -1,0 +1,16 @@
+<nz-card class="card" nzHoverable routerLink="{{car._id}}" [nzCover]="coverTemplate">
+    <nz-card-meta [nzTitle]="titleTemplate"></nz-card-meta>
+</nz-card>
+
+<ng-template #coverTemplate>
+    @if (car.photos.length > 0) {
+        <img src="https://localhost:7255/images/{{car.photos[0]}}" />
+    }
+</ng-template>
+
+<ng-template #titleTemplate class="titleTemplate">
+    {{car.name}}
+    <div class="title-referens">
+        Нажмите, чтобы перейти...
+    </div>
+</ng-template>

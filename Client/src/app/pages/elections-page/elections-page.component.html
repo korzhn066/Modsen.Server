@@ -1,0 +1,7 @@
+<app-page-title title="Выборы"></app-page-title>
+
+@if (authService.isAdmin){
+    <app-admin-add-panel></app-admin-add-panel>
+}
+
+<app-card-grid [cars]="cars"></app-card-grid>

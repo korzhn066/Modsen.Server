@@ -1,0 +1,55 @@
+<nz-layout class="layout">
+  <nz-header nz-menu nzTheme="light" nzMode="horizontal">
+    <ul id="header-menu">
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/rent">Аренда</a>
+      </li>
+  
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/elections">Выборы</a>
+      </li>
+
+      @if (authService.isAdmin) {
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/processing">В обработке</a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/users">Пользователи</a>
+        </li>
+      }    
+  
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/winner">Текущий победитель</a>
+      </li>
+  
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/about">О нас</a>
+      </li>
+    </ul>
+
+    <ul id="header-authentication">
+      @if (!this.authService.isAuthenticated) {
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/registration">Зарегестрироваться</a>
+        </li>
+        
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/login">Войти</a>
+        </li>
+      } @else{
+        <li nz-menu-item nzMatchRouter (click)="logOut()">
+          Выйти
+        </li>
+      }
+    </ul>
+  </nz-header>
+  
+  <nz-content>
+    <div class="inner-content">
+      <router-outlet></router-outlet>
+    </div>
+  </nz-content>
+
+  <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
+</nz-layout>

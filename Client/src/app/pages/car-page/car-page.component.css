@@ -1,0 +1,16 @@
+.comment-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+    display: flex;
+    align-content: center;
+}
+
+nz-comment-content {
+    width: 100%;
+}
+
+.comment-text {
+    width: 100%;
+    outline: none;
+}

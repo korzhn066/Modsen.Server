@@ -1,0 +1,68 @@
+<app-page-title title="Добавить"></app-page-title>
+
+<div class="container">
+    <div class="col">
+        <div class="dropzone" appFileDragAndDrop (filesChangeEmiter)="onFileChange($event)">
+            <div class="text-wrapper">
+                <div class="centered">
+                    <input type="file" name="file" id="file" multiple>
+                    
+                    <span>Перетащите фотографии сюда</span>
+                </div>
+            </div>
+        </div>
+    
+        @if(files.length > 0) {
+            <ul class="files-list">
+                @for (file of files; track $index;) {
+                    <li>
+                        <h3>{{file.item(0)!.name}}</h3>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <div class="col">
+        <div class="main-input-container">
+            <input 
+                nz-input 
+                placeholder="Введите имя" 
+                [(ngModel)]="name"
+                value=""
+                type="text"/>
+    
+            <textarea 
+                rows="3"
+                [(ngModel)]="decription"
+                value=""
+                nz-input placeholder="Введите описание">
+            </textarea>
+        </div>
+    
+        <div class="parametr-container">
+            @for (parametr of carParametrs; track parametr){
+                <div class="input-container">
+                    <input 
+                        nz-input 
+                        placeholder="Введите имя параметра" 
+                        [(ngModel)]="carParametrs[$index].name" 
+                        value="{{parametr.name}}"
+                        type="text"/>
+    
+                    <input 
+                        nz-input 
+                        placeholder="Введите значение параметра" 
+                        value="{{parametr.body}}" 
+                        [(ngModel)]="carParametrs[$index].body" 
+                        type="text" />
+                </div>
+            }
+    
+            <button nz-button nzType="primary" (click)="addParametr()">Добавить параметр</button>
+        </div>
+    
+        <button nz-button nzType="primary" (click)="send()">Добавить</button>
+    </div>
+    
+</div>

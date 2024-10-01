@@ -1,0 +1,27 @@
+.container {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+}
+
+.login-form {
+    width: 300px; 
+}
+
+.login-form-margin {
+    margin-bottom: 16px;
+}
+
+.login-form-forgot {
+    float: right;
+}
+
+.login-form-button {
+    width: 100%;
+}
+
+input {
+    outline: none;
+    border: 0px;
+}
