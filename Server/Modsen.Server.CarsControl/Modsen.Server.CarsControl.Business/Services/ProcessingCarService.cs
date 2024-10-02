@@ -38,16 +38,7 @@ namespace Modsen.Server.CarsControl.Business.Services
                 throw new NotFoundException(nameof(car));
             }
 
-            var document = new CarDocument
-            {
-                Id = car.Id,
-                Name = car.Name,
-                Description = car.Description,
-                Content = car.Content,
-                Photos = car.Photos,
-            };
-
-            await _mongoRepositoryFactory.Create(moveCar.CarType.ToString()).AddAsync(document);
+            await _mongoRepositoryFactory.Create(moveCar.CarType.ToString()).AddAsync(car);
 
             await MongoRepository.DeleteAsync(moveCar.Id);
 
