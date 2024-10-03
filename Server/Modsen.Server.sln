@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modsen.Server.Authenticatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modsen.Server.Authentication.Infrastructure", "Modsen.Server.Authentication\Modsen.Server.Authentication.Infrastructure\Modsen.Server.Authentication.Infrastructure.csproj", "{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modsen.Server.Authentication.Test", "Modsen.Server.Authentication\Modsen.Server.Authentication.Test\Modsen.Server.Authentication.Test.csproj", "{0147A212-E930-402A-8E50-F49AC33D2E88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0147A212-E930-402A-8E50-F49AC33D2E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0147A212-E930-402A-8E50-F49AC33D2E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0147A212-E930-402A-8E50-F49AC33D2E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0147A212-E930-402A-8E50-F49AC33D2E88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +109,7 @@ Global
 		{79C22174-B15E-493E-9F52-2F54698A47AF} = {62FA1063-F080-4112-85E9-C915890D40CF}
 		{7C2E18C8-4D1B-448C-B738-B4AC95C0334B} = {62FA1063-F080-4112-85E9-C915890D40CF}
 		{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92} = {62FA1063-F080-4112-85E9-C915890D40CF}
+		{0147A212-E930-402A-8E50-F49AC33D2E88} = {62FA1063-F080-4112-85E9-C915890D40CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C25981C2-1466-4DAD-B4D2-A4F7B71EF54D}
