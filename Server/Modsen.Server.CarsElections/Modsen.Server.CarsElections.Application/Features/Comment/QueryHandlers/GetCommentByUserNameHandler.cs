@@ -50,6 +50,8 @@ namespace Modsen.Server.CarsElections.Application.Features.Comment.QueryHandlers
                 throw new NotFoundException(ErrorConstants.CommentNotFoundError);
             }
 
+            await _cacheRepository.SetAsync(request.UserName + request.CarId, comment, 1000);
+
             return like.Comment;
         }
     }

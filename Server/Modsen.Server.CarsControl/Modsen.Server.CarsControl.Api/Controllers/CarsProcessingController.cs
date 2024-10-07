@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Modsen.Server.CarsControl.Business.Interfaces;
+using Modsen.Server.CarsControl.Business.Models.Requests;
+using Modsen.Server.CarsControl.DataAccess.Models;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
@@ -21,18 +23,26 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> UpdateCar(string id, string json)
+        public async Task<IActionResult> UpdateCar(UpdateCar updateCar)
         {
-            await _processingCarService.UpdateCarAsync(id, json);
+            await _processingCarService.UpdateCarAsync(updateCar);
 
             return NoContent();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCar(string json, IFormFileCollection formFiles)
+        [Route("move")]
+        public async Task<IActionResult> Move(MoveCar moveCar)
         {
-            await _processingCarService.AddCarAsync(json, formFiles);
+            await _processingCarService.MoveAsync(moveCar);
+
+            return NoContent();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCar(AddCar addCar)
+        {
+            await _processingCarService.AddCarAsync(addCar);
 
             return NoContent();
         }

@@ -38,6 +38,14 @@ app.UseCookiePolicy(new CookiePolicyOptions
     Secure = CookieSecurePolicy.Always
 });
 
+app.UseCors(optins =>
+{
+    optins.WithOrigins("http://localhost:4200");
+    optins.AllowCredentials();
+    optins.AllowAnyHeader();
+    optins.AllowAnyMethod();
+});
+
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
