@@ -12,12 +12,16 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="MockQueryable.Moq" Version="7.0.3" />
+    <PackageReference Include="Moq.EntityFrameworkCore" Version="8.0.1.2" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Modsen.Server.CarsElections.Application\Modsen.Server.CarsElections.Application.csproj" />
     <ProjectReference Include="..\Modsen.Server.CarsElections.Domain\Modsen.Server.CarsElections.Domain.csproj" />
+    <ProjectReference Include="..\Modsen.Server.CarsElections.Infrastructure\Modsen.Server.CarsElections.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,11 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Car\CommandHandlers\" />
-    <Folder Include="Features\Car\QueryHandlers\" />
-    <Folder Include="Features\Comment\CommandHandlers\" />
     <Folder Include="Features\Comment\QueryHandlers\" />
-    <Folder Include="Features\Like\CommandHandlers\" />
     <Folder Include="Features\User\CommandHandlers\" />
   </ItemGroup>
 

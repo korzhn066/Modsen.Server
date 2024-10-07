@@ -1,16 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Modsen.Server.Authentication.Test.Extensions;
+using Modsen.Server.Shared.Extensions;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit.Sdk;
 
 namespace Modsen.Server.Authentication.Test.MockHelpers
 {

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modsen.Server.Shared\Modsen.Server.Shared.csproj" />
     <ProjectReference Include="..\Modsen.Server.Authentication.Application\Modsen.Server.Authentication.Application.csproj" />
     <ProjectReference Include="..\Modsen.Server.Authentication.Domain\Modsen.Server.Authentication.Domain.csproj" />
   </ItemGroup>

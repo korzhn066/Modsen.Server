@@ -12,7 +12,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 {
     public class GetCarCommentsHandler(
         ICarRepository carRepository,
-         ILogger<GetCarComments> logger,
+        ILogger<GetCarComments> logger,
         ICacheRepository cacheRepository)
         : IRequestHandler<GetCarComments, Domain.Entities.Car>
     {
@@ -32,9 +32,9 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
             }
             
             carComments = await _carRepository.Query
-                    .GetQuery(new IncludeCarCommentsSpecification(request.Page, request.Count))
-                    .GetQuery(new CarIdSpecification(request.CarId))
-                    .FirstOrDefaultAsync(cancellationToken);
+                .GetQuery(new IncludeCarCommentsSpecification(request.Page, request.Count))
+                .GetQuery(new CarIdSpecification(request.CarId))
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (carComments is null)
             {

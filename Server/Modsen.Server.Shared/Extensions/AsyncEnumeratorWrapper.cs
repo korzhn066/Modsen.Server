@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Modsen.Server.Authentication.Test.Extensions
+namespace Modsen.Server.Shared.Extensions
 {
     internal class AsyncEnumeratorWrapper<T>(IEnumerator<T> source) : IAsyncEnumerator<T>
     {
-        private readonly IEnumerator<T> Source = source;
+        private readonly IEnumerator<T> _source = source;
 
-        public T Current => Source.Current;
+        public T Current => _source.Current;
 
         public ValueTask DisposeAsync()
         {
@@ -19,7 +19,7 @@ namespace Modsen.Server.Authentication.Test.Extensions
 
         public ValueTask<bool> MoveNextAsync()
         {
-            return new ValueTask<bool>(Source.MoveNext());
+            return new ValueTask<bool>(_source.MoveNext());
         }
     }
 }
