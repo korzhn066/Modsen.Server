@@ -7,6 +7,7 @@ using Modsen.Server.Shared.Constants;
 using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.CarsElections.Domain.Interfaces.Repositories;
 using Microsoft.Extensions.Logging;
+using Modsen.Server.Shared.Enums;
 
 namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
 {
@@ -32,6 +33,7 @@ namespace Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers
             }
         
             currentWinningCar = await _carRepository.Query
+                .GetQuery(new CarTypeSpecification(CarType.Elections))
                 .GetQuery(new CarOrderByDescendingScoreSpecification())
                 .FirstOrDefaultAsync(cancellationToken);
 

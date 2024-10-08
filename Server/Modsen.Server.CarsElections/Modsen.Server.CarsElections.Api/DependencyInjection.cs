@@ -17,7 +17,7 @@ namespace Modsen.Server.CarsElections.Api
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
-            services.AddAutoMapper(typeof(CommentMappingProfile), typeof(LikeMappingProfile));
+            services.AddAutoMapper(typeof(CommentMappingProfile), typeof(LikeMappingProfile), typeof(CarMappingProfile));
 
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();

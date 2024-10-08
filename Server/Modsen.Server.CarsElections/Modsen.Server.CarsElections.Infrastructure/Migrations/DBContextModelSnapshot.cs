@@ -27,6 +27,9 @@ namespace Modsen.Server.CarsElections.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("CarType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Cars");
@@ -34,11 +37,13 @@ namespace Modsen.Server.CarsElections.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1"
+                            Id = "1",
+                            CarType = 0
                         },
                         new
                         {
-                            Id = "2"
+                            Id = "2",
+                            CarType = 0
                         });
                 });
 
@@ -81,7 +86,7 @@ namespace Modsen.Server.CarsElections.Infrastructure.Migrations
                         {
                             Id = 1,
                             CarId = "1",
-                            DateTime = new DateTime(2024, 8, 29, 11, 49, 21, 633, DateTimeKind.Local).AddTicks(5331),
+                            DateTime = new DateTime(2024, 9, 25, 11, 11, 23, 314, DateTimeKind.Local).AddTicks(9272),
                             DislikeCount = 2,
                             LikeCount = 1,
                             Message = "Some message",

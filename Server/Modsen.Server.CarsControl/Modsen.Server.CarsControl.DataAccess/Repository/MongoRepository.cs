@@ -1,5 +1,6 @@
 ﻿using Modsen.Server.CarsControl.DataAccess.Entities;
 using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
+using Modsen.Server.CarsControl.DataAccess.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -32,11 +33,15 @@ namespace Modsen.Server.CarsControl.DataAccess.Repository
             return entity.Id.ToString();
         }
 
-        public async Task<UpdateResult> UpdateAsync(string id, BsonDocument entity)
+        public async Task<UpdateResult> UpdateAsync(UpdateCar updateCar)
         {
-            return await _collection.UpdateOneAsync(
-                Builders<CarDocument>.Filter.Eq("Id", new ObjectId(id)),
-                new BsonDocument("$set", new BsonDocument("Content", entity)));
+            var filter = Builders<CarDocument>.Filter.Eq("Id", new ObjectId(updateCar.Id));
+            var update = Builders<CarDocument>.Update
+                .Set(carDocument => carDocument.Name, updateCar.Name)
+                .Set(carDocument => carDocument.Description, updateCar.Description)
+                .Set(carDocument => carDocument.Content, BsonDocument.Parse(updateCar.Json));
+
+            return await _collection.UpdateOneAsync(filter, update);
         }
 
         public async Task<DeleteResult> DeleteAsync(string id)

@@ -42,13 +42,9 @@ namespace Modsen.Server.Authentication.Api.Controllers
 
         [HttpPut]
         [Route("status")]
-        public async Task<IActionResult> ChangeUserStatus(string userId, UserStatus userStatus)
+        public async Task<IActionResult> ChangeUserStatus(ChangeApplicationUserStatus changeApplicationUserStatus)
         {
-            await _mediator.Send(new ChangeApplicationUserStatus
-            {
-                UserId = userId,
-                Status = userStatus
-            });
+            await _mediator.Send(changeApplicationUserStatus);
 
             return NoContent();
         }

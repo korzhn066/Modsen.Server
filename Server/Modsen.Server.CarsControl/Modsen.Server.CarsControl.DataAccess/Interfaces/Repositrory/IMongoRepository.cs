@@ -1,4 +1,5 @@
 ﻿using Modsen.Server.CarsControl.DataAccess.Entities;
+using Modsen.Server.CarsControl.DataAccess.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -17,7 +18,7 @@ namespace Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory
         
         Task<string> AddAsync(CarDocument entity);
         
-        Task<UpdateResult> UpdateAsync(string id, BsonDocument entity);
+        Task<UpdateResult> UpdateAsync(UpdateCar updateCar);
         
         Task<DeleteResult> DeleteAsync(string id);
     }

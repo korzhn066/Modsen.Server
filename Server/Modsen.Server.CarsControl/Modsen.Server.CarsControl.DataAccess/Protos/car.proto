@@ -5,12 +5,30 @@ option csharp_namespace = "Modsen.Server.CarsControl";
 package greet;
 
 service Car {
-  rpc AddCar (CarRequest) returns (CarReply);
+	rpc AddCar (CarRequest) returns (CarReply);
+	rpc UpdateCar (UpdateCarRequest) returns (CarReply);
+	rpc DeleteCar (DeleteCarRequest) returns (CarReply);
 }
 
 message CarRequest {
-  string id = 1;
+	string id = 1;
+	CarType carType = 4;
 }
 
-message CarReply {
+message UpdateCarRequest {
+	string id = 2;
+	CarType carType = 5;
+}
+
+message DeleteCarRequest {
+	string id = 3;
+}
+
+
+message CarReply { }
+
+enum CarType{
+	Rent = 0;
+    Processing = 1;
+    Elections = 2;
 }

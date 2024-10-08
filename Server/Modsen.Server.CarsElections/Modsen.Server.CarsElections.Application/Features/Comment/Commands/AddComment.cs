@@ -3,7 +3,7 @@ using Modsen.Server.CarsElections.Domain.Enums;
 
 namespace Modsen.Server.CarsElections.Application.Features.Comment.Commands
 {
-    public record AddComment : IRequest
+    public record AddComment : IRequest<Domain.Entities.Comment>
     {
         public string UserName { get; set; } = null!;
         public string Message { get; set; } = null!;

@@ -2,6 +2,7 @@
 using Modsen.Server.CarsElections.Application.Features.Car.Queries;
 using Modsen.Server.CarsElections.Application.Features.Car.QueryHandlers;
 using Modsen.Server.CarsElections.Test.MockHelpers;
+using Modsen.Server.Shared.Enums;
 using Modsen.Server.Shared.Exceptions;
 using Moq;
 using System;
@@ -63,7 +64,8 @@ namespace Modsen.Server.CarsElections.Test.Features.Car.QueryHandlers
             {
                 new()
                 {
-                    Id = "1"
+                    Id = "1",
+                    CarType = CarType.Elections
                 }
             };
 

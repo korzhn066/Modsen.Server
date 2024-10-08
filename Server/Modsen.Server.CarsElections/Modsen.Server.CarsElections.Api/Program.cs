@@ -33,6 +33,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(optins =>
+{
+    optins.WithOrigins("http://localhost:4200");
+    optins.AllowCredentials();
+    optins.AllowAnyHeader();
+    optins.AllowAnyMethod();
+});
+
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
@@ -44,6 +52,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<CommentHub>("/commentHub");
+app.MapHub<CommentHub>("/hubs/comments");
 
 app.Run();

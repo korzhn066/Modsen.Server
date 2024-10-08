@@ -6,8 +6,6 @@ using Modsen.Server.CarsElections.Api.Enums;
 using Modsen.Server.CarsElections.Api.Models.Requests;
 using Modsen.Server.CarsElections.Api.Models.Responses;
 using Modsen.Server.CarsElections.Application.Features.Comment.Commands;
-using Modsen.Server.CarsElections.Domain.Entities;
-using System.Threading;
 
 namespace Modsen.Server.CarsElections.Api.Hubs
 {
@@ -24,13 +22,9 @@ namespace Modsen.Server.CarsElections.Api.Hubs
             var addComment = _mapper.Map<AddComment>(commentRequest);
             addComment.UserName = Context!.User!.Identity!.Name!;
 
-            await _mediator.Send(addComment);
+            var comment = await _mediator.Send(addComment);
 
-            var response = new CommentHubResponse<Comment>
-            {
-                Type = CommentHubResponseType.Add,
-                Data = _mapper.Map<Comment>(commentRequest)
-            };
+            var response = _mapper.Map<CommentResponse>(comment);
 
             await Clients.All.SendAsync("CommentReceive", response);
         }
@@ -39,13 +33,9 @@ namespace Modsen.Server.CarsElections.Api.Hubs
         {
             var comment = await _mediator.Send(updateComment);
 
-            var response = new CommentHubResponse<Comment>
-            {
-                Type = CommentHubResponseType.Update,
-                Data = comment
-            };
+            var response = _mapper.Map<CommentResponse>(comment);
 
-            await Clients.All.SendAsync("CommentReceive", response);
+            await Clients.All.SendAsync("CommentUpdateReceive", response);
         }
 
         public async Task DeleteComment(int id)
@@ -55,13 +45,7 @@ namespace Modsen.Server.CarsElections.Api.Hubs
                 CommentId = id,
             });
 
-            var response = new CommentHubResponse<int>
-            {
-                Type = CommentHubResponseType.Add,
-                Data = id
-            };
-
-            await Clients.All.SendAsync("CommentReceive", response);
+            await Clients.All.SendAsync("CommentDeleteReceive", id);
         }
     }
 }
