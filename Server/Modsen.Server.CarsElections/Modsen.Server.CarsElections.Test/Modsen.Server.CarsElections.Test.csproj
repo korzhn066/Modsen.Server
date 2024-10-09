@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\User\**" />
+    <EmbeddedResource Remove="Features\User\**" />
+    <None Remove="Features\User\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="MockQueryable.Moq" Version="7.0.3" />
@@ -30,7 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Comment\QueryHandlers\" />
-    <Folder Include="Features\User\CommandHandlers\" />
   </ItemGroup>
 
 </Project>

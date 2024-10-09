@@ -12,7 +12,7 @@ using MongoDB.Bson;
 
 namespace Modsen.Server.CarsControl.Business.Services
 {
-    internal class ProcessingCarService(
+    public class ProcessingCarService(
         IMongoRepositoryFactory mongoRepositoryFactory,
         IGrpcService grpcService,
         IWebHostEnvironment webHostEnvironment,

@@ -2,18 +2,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Modsen.Server.CarsControl.Business.Interfaces;
 using Modsen.Server.CarsControl.Business.Services.Base;
-using Modsen.Server.Shared.Enums;
 using Modsen.Server.CarsControl.DataAccess.Interfaces.Repositrory;
 using Modsen.Server.CarsControl.DataAccess.Interfaces.Services;
 using Modsen.Server.Shared.Exceptions;
 using Modsen.Server.CarsControl.Business.Models.Requests;
 using Modsen.Server.CarsControl.DataAccess.Entities;
-using Modsen.Server.CarsControl.DataAccess.Services;
 using MongoDB.Bson;
 
 namespace Modsen.Server.CarsControl.Business.Services
 {
-    internal class ElectionsCarService(
+    public class ElectionsCarService(
         IMongoRepositoryFactory mongoRepositoryFactory,
         IGrpcService grpcService,
         ILogger<CarServiceBase> logger,

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Modsen.Server.CarsControl.Business\Modsen.Server.CarsControl.Business.csproj" />
     <ProjectReference Include="..\Modsen.Server.CarsControl.DataAccess\Modsen.Server.CarsControl.DataAccess.csproj" />
   </ItemGroup>
 
