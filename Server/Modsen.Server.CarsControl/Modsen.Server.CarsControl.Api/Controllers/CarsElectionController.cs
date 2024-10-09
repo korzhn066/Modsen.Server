@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Modsen.Server.CarsControl.Business.Models.Requests;
 using Modsen.Server.CarsControl.Business.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Modsen.Server.CarsControl.DataAccess.Models;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Modsen.Server.CarsControl.Api.Controllers
 {
@@ -21,20 +25,29 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateCar(string id, string json)
+        public async Task<IActionResult> UpdateCar(UpdateCar updateCar)
         {
-            await _electionsCarService.UpdateCarAsync(id, json);
+            await _electionsCarService.UpdateCarAsync(updateCar);
 
             return NoContent();
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddCar(string json, IFormFileCollection formFiles)
+        public async Task<IActionResult> AddCar(AddCar addCar)
         {
-            await _electionsCarService.AddCarAsync(json, formFiles);
+            await _electionsCarService.AddCarAsync(addCar);
+
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("move")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Move(MoveCar moveCar)
+        {
+            await _electionsCarService.MoveAsync(moveCar);
 
             return NoContent();
         }
@@ -51,9 +64,9 @@ namespace Modsen.Server.CarsControl.Api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetCar(string id, CancellationToken cancellationToken)
         {
-            var cars = await _electionsCarService.GetCarAsync(id, cancellationToken);
+            var car = await _electionsCarService.GetCarAsync(id, cancellationToken);
 
-            return Ok(cars);
+            return Ok(car);
         }
     }
 }

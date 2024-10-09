@@ -9,6 +9,9 @@ using Modsen.Server.CarsControl.DataAccess.Interfaces.Services;
 using Modsen.Server.Shared.Constants;
 using Modsen.Server.Shared.Exceptions;
 using MongoDB.Bson;
+using Modsen.Server.CarsControl.Business.Models.Requests;
+using Modsen.Server.CarsControl.DataAccess.Models;
+using System.Threading;
 
 namespace Modsen.Server.CarsControl.Business.Services.Base
 {
@@ -25,6 +28,20 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
 
         public async Task DeleteCarAsync(string carId)
         {
+            var car = await MongoRepository.GetByIdAsync(carId);
+
+            if (car is null)
+            {
+                _logger.LogError("CarNotFound");
+
+                throw new NotFoundException(ErrorConstants.CarNotFoundError);
+            }
+
+            foreach (var filename in car.Photos)
+            {
+                File.Delete(_webHostEnvironment.WebRootPath + "\\Images\\" + filename);
+            }
+
             var result = await MongoRepository.DeleteAsync(carId);
 
             if (result.DeletedCount < 1)
@@ -34,15 +51,24 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
                 throw new NotFoundException(ErrorConstants.NotFoundEntityError);
             }
 
+            await _grpcService.DeleteCarAsync(carId);
+
             _logger.LogInformation("Car deleted");
         }
 
-        public async Task<string> GetCarAsync(string carId, CancellationToken cancellationTokend)
+        public async Task<string> GetCarAsync(string carId, CancellationToken cancellationToken)
         {
-            var car = await MongoRepository.GetByIdAsync(carId, cancellationTokend);
+            var car = await MongoRepository.GetByIdAsync(carId, cancellationToken);
+
+            if (car is null)
+            {
+                _logger.LogError("CarNotFound");
+
+                throw new NotFoundException(ErrorConstants.CarNotFoundError);
+            }
 
             _logger.LogInformation("Get car");
-            
+
             return car.ToJson();
         }
 
@@ -56,9 +82,9 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
             return cars.ToJson();
         }
 
-        public async Task UpdateCarAsync(string carId, string car)
+        public async Task UpdateCarAsync(UpdateCar updateCar)
         {
-            var result = await MongoRepository.UpdateAsync(carId, BsonDocument.Parse(car));
+            var result = await MongoRepository.UpdateAsync(updateCar);
 
             if (!result.IsAcknowledged)
             {
@@ -70,29 +96,7 @@ namespace Modsen.Server.CarsControl.Business.Services.Base
             _logger.LogInformation("Update car");
         }
 
-        public async Task AddCarAsync(string car, IFormFileCollection formFiles)
-        {
-            var photos = new BsonArray();
-
-            foreach (var file in formFiles)
-            {
-                var fileName = UploadFile(file);
-
-                photos.Add(fileName);
-            }
-
-            var id = await MongoRepository.AddAsync(new CarDocument
-            {
-                Content = BsonDocument.Parse(car),
-                Photos = photos
-            });
-          
-            _logger.LogInformation("Add car");
-            
-            await _grpcService.AddCarAsync(id);
-        }
-
-        private string UploadFile(IFormFile file)
+        protected string UploadFile(IFormFile file)
         {
             var rootPath = _webHostEnvironment.WebRootPath + "\\Images\\";
             var fileName = Guid.NewGuid().ToString() + file.FileName[file.FileName.LastIndexOf('.')..];

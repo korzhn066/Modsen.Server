@@ -2,6 +2,10 @@
 {
     public interface IGrpcService
     {
-        Task AddCarAsync(string carId, CancellationToken cancellationToken = default);
+        Task AddCarAsync(CarRequest carRequest, CancellationToken cancellationToken = default);
+
+        Task DeleteCarAsync(string carId);
+        
+        Task UpdateCarAsync(UpdateCarRequest updateCarRequest, CancellationToken cancellationToken = default);
     }
 }
