@@ -18,7 +18,16 @@ namespace Modsen.Server.CarsControl.DataAccess
                 new MongoClient(builder.Configuration["MongoDbSettings:ConnectionString"])
                 .GetDatabase(builder.Configuration["MongoDbSettings:DataBaseName"]));
 
-            services.AddGrpcClient<Car.CarClient>(options => options.Address = new Uri(builder.Configuration["Grpc:Host"]!));
+            services
+                .AddGrpcClient<Car.CarClient>(options => options.Address = new Uri(builder.Configuration["Grpc:Host"]!))
+                .ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    var handler = new HttpClientHandler();
+                    handler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+                    return handler;
+                });
 
             services.AddScoped<IMongoRepositoryFactory, MongoRepositoryFactory>();
 

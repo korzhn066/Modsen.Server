@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modsen.Server.Authenticatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modsen.Server.Authentication.Infrastructure", "Modsen.Server.Authentication\Modsen.Server.Authentication.Infrastructure\Modsen.Server.Authentication.Infrastructure.csproj", "{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B95C0E75-819C-4EE6-A7A1-59DE496B535E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1AD8AF9-0E51-4CD3-ABD3-2CEFB51DCA92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B95C0E75-819C-4EE6-A7A1-59DE496B535E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B95C0E75-819C-4EE6-A7A1-59DE496B535E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B95C0E75-819C-4EE6-A7A1-59DE496B535E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B95C0E75-819C-4EE6-A7A1-59DE496B535E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
