@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "modsen.server.carscontrol.api": "StartDebugging",
+        "modsen.server.authentication.api": "StartDebugging",
+        "modsen.server.carselections.api": "StartDebugging"
+      }
+    }
+  }
+}

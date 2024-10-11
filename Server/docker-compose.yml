@@ -1,0 +1,103 @@
+version: '3.4'
+
+services:
+  modsen.server.carscontrol.api:
+    container_name: cars-control
+    image: ${DOCKER_REGISTRY-}modsenservercarscontrolapi 
+    build:
+        context: .
+        dockerfile: Modsen.Server.CarsControl/Modsen.Server.CarsControl.Api/Dockerfile
+    depends_on:
+        - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:6-jammy
+    ports:
+        - '27017:27017'
+    volumes:
+        - mongodb-data:/data/db
+
+  modsen.server.authentication.api:
+    container_name: authentication
+    image: ${DOCKER_REGISTRY-}modsenserverauthenticationapi
+    build:
+        context: .
+        dockerfile: Modsen.Server.Authentication/Modsen.Server.Authentication.Api/Dockerfile
+    depends_on:
+        - mysql
+    
+
+  modsen.server.carselections.api:
+    container_name: cars-elections
+    image: ${DOCKER_REGISTRY-}modsenservercarselectionsapi
+    build:
+        context: .
+        dockerfile: Modsen.Server.CarsElections/Modsen.Server.CarsElections.Api/Dockerfile
+    depends_on:
+        - kafka
+        - zookeeper   
+        - mysql
+        - redis
+  
+  mysql: 
+    container_name: sql-server
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=Password1_
+    ports:
+        - "1433:1433"
+    
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper:latest
+    ports:
+        - "2181:2181"
+    environment:
+        - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    container_name: kafka
+    image: wurstmeister/kafka:latest
+    ports:
+        - "9092:9092"
+    expose:
+        - "9093"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "User:1:1"
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+        - zookeeper
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+        - "6379:6379"
+    volumes:
+        - ./redisdata:/data
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+        - "12000:80"
+    volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+        - modsen.server.carscontrol.api
+        - modsen.server.authentication.api
+        - modsen.server.carselections.api 
+    
+
+volumes:
+  mongodb-data:
+    driver: local
+  database-mysql:
